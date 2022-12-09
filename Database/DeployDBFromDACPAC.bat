@@ -3,7 +3,7 @@ Title Publish Main Database from DACPAC
 
 REM *** Prepare parameters for executing ***
 set deployenv="DEV"
-set SQLServerSolutionRootUrl="C:\DATABASE\DatabaseDeployment"
+set SQLServerSolutionRootUrl="C:\crawl-project\Database\DatabaseDeployment"
 set MSBuild="C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe"
 set SQLServerSolution="%SQLServerSolutionRootUrl%\DatabaseDeployment.sln"
 set CoreData_DACPAC="%SQLServerSolutionRootUrl%\CoreData\bin\Local\CoreData.dacpac"
