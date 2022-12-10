@@ -9,66 +9,103 @@ using Fizzler.Systems.HtmlAgilityPack;
 using HtmlAgilityPack;
 using System.Text;
 using Demo.Crawler.Common.Contants;
+using System.Net;
 
 namespace Demo.Crawler.Services
 {
     public class CrawlerService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IArticleRepository _articleRepository;
+        //private readonly IArticleRepository _articleRepository;
+        private readonly IRepository<Article> _articleRepository;
+        private readonly IRepository<ArticleContent> _articleContentRepository;
 
-        public CrawlerService(IUnitOfWork unitOfWork, IArticleRepository articleRepository)
+        public class GZipWebClient : WebClient
+        {
+            protected override WebRequest GetWebRequest(Uri address)
+            {
+                HttpWebRequest request = (HttpWebRequest)base.GetWebRequest(address);
+                request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+                return request;
+            }
+        }
+
+        //public CrawlerService(IUnitOfWork unitOfWork, IArticleRepository articleRepository)
+        public CrawlerService(IUnitOfWork unitOfWork, IRepository<Article> articleRepository, IRepository<ArticleContent> articleContentRepository)
         {
             _unitOfWork = unitOfWork;
             _articleRepository = articleRepository;
+            _articleContentRepository = articleContentRepository;
         }
 
         public async Task<IEnumerable<Article>> StartCrawlerAsync()
         {
-            var web = new HtmlWeb()
+            string html;
+            string htmlArticle;
+            GZipWebClient webClient = new GZipWebClient();
+            List<Article> listArticle = new List<Article>();
+            List<ArticleContent> lisArticleContent = new List<ArticleContent>();
+
+            for (int i = 13; i < 15; i++)
             {
-                AutoDetectEncoding = false,
-                OverrideEncoding = Encoding.UTF8
-            };
+                html = webClient.DownloadString($"{Contants.page}{i}");
+                HtmlDocument document = new HtmlDocument();
+                document.LoadHtml(html);
+                List<HtmlNode> articles = document.DocumentNode.QuerySelectorAll("div.zone--timeline > article").ToList();
 
-            var listArticle = new List<Article>();
-            var lisArticleContent = new List<ArticleContent>();
-
-            for (int i = 1; i < 2; i++)
-            {
-                var document = web.Load($"{Contants.page}{i}");
-                var articles = document.DocumentNode.QuerySelectorAll("article").ToList();
-
-                foreach (var item in articles)
+                foreach (HtmlNode item in articles)
                 {
-                    var article = item.QuerySelector("div > a");
+                    HtmlNode article = item.QuerySelector("a");
 
                     if (article != null)
                     {
+                        Guid articleId = Guid.NewGuid();
                         string articleName = article.Attributes["title"].Value;
                         string href = article.Attributes["href"].Value;
-                        string imageThumb = article.QuerySelector("picture > source > img").Attributes["src"].Value;
-                        string description = item.QuerySelector("p.description > a").InnerHtml.Replace("\n", "");
-                        DateTime time = DateTime.Now;
-
-                        var newArticle = new Article()
+                        string? imageThumb = article.QuerySelector("img")?.Attributes["data-src"].Value;
+                        string? description = item.QuerySelector("div > div.summary > p")?.InnerText.Replace("\n", "");
+                        string? time = item.QuerySelector("div > div.meta > span.time")?.InnerText.Replace("\n", "");
+                        DateTime dateTime = new DateTime();
+                        if (time != null)
                         {
-                            Id = Guid.NewGuid(),
+                            dateTime = DateTime.ParseExact(time, "HH:mm dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                        }
+
+                        htmlArticle = webClient.DownloadString(href);
+                        HtmlDocument documentArticle = new HtmlDocument();
+                        documentArticle.LoadHtml(htmlArticle);
+                        string? content = documentArticle.DocumentNode.QuerySelector("div.cms-body")?.OuterHtml;
+
+                        Article newArticle = new Article()
+                        {
+                            Id = articleId,
                             ArticleName = articleName,
                             Status = "Publish",
-                            CreationDate = time,
-                            LastSaveDate = time,
+                            CreationDate = dateTime,
+                            LastSaveDate = dateTime,
                             CreationBy = Contants.idAdmin,
                             RefUrl = href,
                             ImageThumb = imageThumb,
-                            Description = description
+                            Description = description,
+                            CategoryId = 14,
+                            Page = i
                         };
                         listArticle.Add(newArticle);
 
-                        _articleRepository.CreateNewArticle(newArticle);
+                        ArticleContent newArticleContent = new ArticleContent()
+                        {
+                            Id = Guid.NewGuid(),
+                            Content = content,
+                            ArticleId = articleId
+                        };
+                        lisArticleContent.Add(newArticleContent);
                     }
                 }
             }
+
+            _articleRepository.AddRange(listArticle);
+
+            _articleContentRepository.AddRange(lisArticleContent);
 
             var saved = await _unitOfWork.CommitAsync();
 

@@ -86,6 +86,7 @@
     <Build Include="dbo\Tables\ArticleContent.sql" />
     <Build Include="dbo\Tables\User.sql" />
     <None Include="Deployment\PreDeployment.WipeData.sql" />
+    <Build Include="dbo\Tables\Category.sql" />
   </ItemGroup>
   <ItemGroup>
     <PreDeploy Include="Scripts\Script.PreDeployment.sql" />

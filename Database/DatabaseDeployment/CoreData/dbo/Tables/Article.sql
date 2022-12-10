@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Article]
 (
-	[Id] [uniqueidentifier] NOT NULL,
+	[Id] UNIQUEIDENTIFIER NOT NULL,
 	[ArticleName] [nvarchar](500) NOT NULL,
 	[Status] [nvarchar](255) NOT NULL,
 	[CreationDate] [datetime2](7) NULL,
@@ -9,11 +9,20 @@
     [RefURL] NVARCHAR(255) NOT NULL, 
     [ImageThumb] NVARCHAR(255) NULL, 
     [Description] NVARCHAR(500) NULL, 
+    [CategoryId] INT NOT NULL, 
+    [Page] INT NOT NULL, 
     CONSTRAINT [Pk_Article_Id] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Article]  ADD  CONSTRAINT [Fk_Article_CategoryId] FOREIGN KEY([CategoryId])
+REFERENCES [dbo].[Category] ([Id])
+GO
+
+ALTER TABLE [dbo].[Article] CHECK CONSTRAINT [Fk_Article_CategoryId]
 GO
 
 /****** Object:  Index [Nidx_Article_Status] ******/

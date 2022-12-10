@@ -25,6 +25,11 @@ namespace Demo.CoreData
             DbSet.Add(entity);
         }
 
+        public void AddRange(List<T> entity)
+        {
+            DbSet.AddRange(entity);
+        }
+
         public void Delete(T entity)
         {
             DbSet.Remove(entity);

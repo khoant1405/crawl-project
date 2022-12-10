@@ -56,6 +56,14 @@ public partial class Article
     [StringLength(500)]
     public string? Description { get; set; }
 
+    public int CategoryId { get; set; }
+
+    public int Page { get; set; }
+
     [InverseProperty("Article")]
     public virtual ICollection<ArticleContent> ArticleContents { get; } = new List<ArticleContent>();
+
+    [ForeignKey("CategoryId")]
+    [InverseProperty("Articles")]
+    public virtual Category Category { get; set; } = null!;
 }

@@ -20,6 +20,8 @@ public partial class DemoDbContext : DbContext
 
     public virtual DbSet<ArticleContent> ArticleContents { get; set; }
 
+    public virtual DbSet<Category> Categories { get; set; }
+
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -41,6 +43,10 @@ public partial class DemoDbContext : DbContext
             entity.Property(e => e.LastSaveDate).HasComment("The datetime when article is save");
             entity.Property(e => e.RefUrl).HasComment("RefURL");
             entity.Property(e => e.Status).HasComment("Article Status : EDIT, PUBLISH, DELETE...");
+
+            entity.HasOne(d => d.Category).WithMany(p => p.Articles)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("Fk_Article_CategoryId");
         });
 
         modelBuilder.Entity<ArticleContent>(entity =>
@@ -56,6 +62,15 @@ public partial class DemoDbContext : DbContext
             entity.HasOne(d => d.Article).WithMany(p => p.ArticleContents)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("Fk_ArticleContent_ArticleId");
+        });
+
+        modelBuilder.Entity<Category>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("Pk_Category_Id");
+
+            entity.Property(e => e.Id).HasComment("Primary Key");
+            entity.Property(e => e.CategoryName).HasComment("Category Name");
+            entity.Property(e => e.ParentId).HasComment("Parent Category");
         });
 
         modelBuilder.Entity<User>(entity =>
