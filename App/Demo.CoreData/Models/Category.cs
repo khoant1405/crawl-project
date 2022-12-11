@@ -26,6 +26,9 @@ public partial class Category
     /// </summary>
     public int ParentId { get; set; }
 
+    [StringLength(500)]
+    public string? UrlName { get; set; }
+
     [InverseProperty("Category")]
     public virtual ICollection<Article> Articles { get; } = new List<Article>();
 }

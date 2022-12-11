@@ -10,12 +10,16 @@ using HtmlAgilityPack;
 using System.Text;
 using Demo.Crawler.Common.Contants;
 using System.Net;
+using Demo.Crawler.Services.Interfaces;
+using Demo.CoreData.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Demo.Crawler.Services
 {
-    public class CrawlerService
+    public class CrawlerService : ICrawlerService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly DemoDbContext _demoDbContext;
         //private readonly IArticleRepository _articleRepository;
         private readonly IRepository<Article> _articleRepository;
         private readonly IRepository<ArticleContent> _articleContentRepository;
@@ -31,14 +35,16 @@ namespace Demo.Crawler.Services
         }
 
         //public CrawlerService(IUnitOfWork unitOfWork, IArticleRepository articleRepository)
-        public CrawlerService(IUnitOfWork unitOfWork, IRepository<Article> articleRepository, IRepository<ArticleContent> articleContentRepository)
+        public CrawlerService(IUnitOfWork unitOfWork, IRepository<Article> articleRepository, IRepository<ArticleContent> articleContentRepository,
+                                DemoDbContext demoDbContext)
         {
             _unitOfWork = unitOfWork;
             _articleRepository = articleRepository;
             _articleContentRepository = articleContentRepository;
+            _demoDbContext = demoDbContext;
         }
 
-        public async Task<IEnumerable<Article>> StartCrawlerAsync()
+        public async Task StartCrawlerAsync(int? startPage, int? endPage)
         {
             string html;
             string htmlArticle;
@@ -46,7 +52,7 @@ namespace Demo.Crawler.Services
             List<Article> listArticle = new List<Article>();
             List<ArticleContent> lisArticleContent = new List<ArticleContent>();
 
-            for (int i = 13; i < 15; i++)
+            for (int? i = startPage; i < endPage + 1; i++)
             {
                 html = webClient.DownloadString($"{Contants.page}{i}");
                 HtmlDocument document = new HtmlDocument();
@@ -60,21 +66,22 @@ namespace Demo.Crawler.Services
                     if (article != null)
                     {
                         Guid articleId = Guid.NewGuid();
+                        int idDisplay = int.Parse(item.Attributes["data-id"].Value);
                         string articleName = article.Attributes["title"].Value;
                         string href = article.Attributes["href"].Value;
                         string? imageThumb = article.QuerySelector("img")?.Attributes["data-src"].Value;
                         string? description = item.QuerySelector("div > div.summary > p")?.InnerText.Replace("\n", "");
-                        string? time = item.QuerySelector("div > div.meta > span.time")?.InnerText.Replace("\n", "");
-                        DateTime dateTime = new DateTime();
-                        if (time != null)
-                        {
-                            dateTime = DateTime.ParseExact(time, "HH:mm dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
-                        }
 
                         htmlArticle = webClient.DownloadString(href);
                         HtmlDocument documentArticle = new HtmlDocument();
                         documentArticle.LoadHtml(htmlArticle);
                         string? content = documentArticle.DocumentNode.QuerySelector("div.cms-body")?.OuterHtml;
+                        string? time = documentArticle.DocumentNode.QuerySelector("meta.cms-date")?.Attributes["content"].Value;
+                        DateTime dateTime = new DateTime();
+                        if (time != null)
+                        {
+                            dateTime = DateTime.Parse(time);
+                        }
 
                         Article newArticle = new Article()
                         {
@@ -87,8 +94,8 @@ namespace Demo.Crawler.Services
                             RefUrl = href,
                             ImageThumb = imageThumb,
                             Description = description,
-                            CategoryId = 14,
-                            Page = i
+                            CategoryId = 12,
+                            IdDisplay = idDisplay
                         };
                         listArticle.Add(newArticle);
 
@@ -108,8 +115,13 @@ namespace Demo.Crawler.Services
             _articleContentRepository.AddRange(lisArticleContent);
 
             var saved = await _unitOfWork.CommitAsync();
+        }
 
-            return listArticle;
+        public IEnumerable<Article> GetAllArticle()
+        {
+            var articles = _articleRepository.List(x => x.Status == "Publish").AsNoTracking().OrderByDescending(x=>x.IdDisplay).ToList();
+            //var articles = _demoDbContext.Articles.AsNoTracking().Where(x => x.Status == "Publish").Include(x=>x.ArticleContents);
+            return articles;
         }
     }
 }

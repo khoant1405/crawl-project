@@ -10,7 +10,7 @@
     [ImageThumb] NVARCHAR(255) NULL, 
     [Description] NVARCHAR(500) NULL, 
     [CategoryId] INT NOT NULL, 
-    [Page] INT NOT NULL, 
+    [IdDisplay] INT NOT NULL, 
     CONSTRAINT [Pk_Article_Id] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

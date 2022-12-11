@@ -58,7 +58,7 @@ public partial class Article
 
     public int CategoryId { get; set; }
 
-    public int Page { get; set; }
+    public int IdDisplay { get; set; }
 
     [InverseProperty("Article")]
     public virtual ICollection<ArticleContent> ArticleContents { get; } = new List<ArticleContent>();

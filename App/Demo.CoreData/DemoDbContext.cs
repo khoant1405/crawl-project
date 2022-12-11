@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Demo.CoreData.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Demo.CoreData;
 
@@ -26,7 +27,8 @@ public partial class DemoDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=localhost,1433;User ID=sa;Password=14051634;TrustServerCertificate=True;Initial Catalog=CoreData;");
+        => optionsBuilder.UseSqlServer("Server=localhost,1433;User ID=sa;Password=14051634;TrustServerCertificate=True;Initial Catalog=CoreData;")
+                        .UseLazyLoadingProxies().ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.DetachedLazyLoadingWarning));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
