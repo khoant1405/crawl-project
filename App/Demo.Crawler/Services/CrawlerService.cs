@@ -7,6 +7,8 @@ using Demo.Crawler.Services.Interfaces;
 using Demo.CoreData.Common;
 using Demo.CoreData.Models.View;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Demo.Crawler.Common;
 
 namespace Demo.Crawler.Services
 {
@@ -107,13 +109,27 @@ namespace Demo.Crawler.Services
 
             _articleContentRepository.AddRange(lisArticleContent);
 
-            var saved = await _unitOfWork.CommitAsync();
+            await _unitOfWork.CommitAsync();
         }
 
-        public IEnumerable<ArticleView> GetAllArticle()
+        public async Task<ArticlePagination> GetAllArticleAsync(int page)
         {
-            var articles = _articleRepository.List(x => x.Status == "Publish").OrderByDescending(x => x.CreationDate).Select(x => _mapper.Map<ArticleView>(x)).ToList();
-            return articles;
+            int pageSize = 16;
+            var allArticles = _articleRepository.List(x => x.Status == "Publish").OrderByDescending(x => x.CreationDate).AsNoTracking();
+            var count = await allArticles.CountAsync();
+            var totalPages = (int)Math.Ceiling(count / (double)pageSize);
+            var hasPreviousPage = page > 1;
+            var hasNextPage = page < totalPages;
+            var items = await allArticles.Skip((page - 1) * pageSize).Take(pageSize).Select(x => _mapper.Map<ArticleView>(x)).ToListAsync();
+            //var showFromPage = page - 2 > 0 ? page - 2 : page - 1;
+            return new ArticlePagination
+            {
+                PageIndex = page,
+                TotalPages = totalPages,
+                HasPreviousPage = hasPreviousPage,
+                HasNextPage = hasNextPage,
+                Data = items
+            };
         }
     }
 }

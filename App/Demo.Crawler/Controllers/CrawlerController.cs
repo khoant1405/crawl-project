@@ -34,10 +34,10 @@ namespace Demo.Crawler.Controllers
 
         [Route("[action]")]
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<ArticleView>), (int)HttpStatusCode.OK)]
-        public ActionResult GetAllArticle()
+        [ProducesResponseType(typeof(ArticlePagination), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult> GetAllArticle(int page)
         {
-            IEnumerable<ArticleView> articles = _crawlerService.GetAllArticle();
+            var articles = await _crawlerService.GetAllArticleAsync(page);
             return Ok(articles);
         }
     }
