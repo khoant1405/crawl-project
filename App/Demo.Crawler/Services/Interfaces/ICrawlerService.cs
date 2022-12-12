@@ -1,9 +1,8 @@
-﻿using Demo.CoreData.Models;
-
+﻿using Demo.CoreData.Models.View;
 namespace Demo.Crawler.Services.Interfaces;
 
 public interface ICrawlerService
 {
     Task StartCrawlerAsync(int? startPage, int? endPage);
-    IEnumerable<Article> GetAllArticle();
+    IEnumerable<ArticleView> GetAllArticle();
 }

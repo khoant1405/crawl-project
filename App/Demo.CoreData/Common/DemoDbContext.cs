@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Demo.CoreData.Models;
+﻿using Demo.CoreData.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Demo.CoreData;
+namespace Demo.CoreData.Common;
 
 public partial class DemoDbContext : DbContext
 {
@@ -26,7 +24,7 @@ public partial class DemoDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=localhost,1433;User ID=sa;Password=14051634;TrustServerCertificate=True;Initial Catalog=CoreData;");
+        => optionsBuilder.UseSqlServer("Server=localhost,1433;User ID=sa;Password=1405;TrustServerCertificate=True;Initial Catalog=CoreData;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -34,15 +32,7 @@ public partial class DemoDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("Pk_Article_Id");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasComment("Primary Key");
-            entity.Property(e => e.ArticleName).HasComment("Article Name");
-            entity.Property(e => e.CreationBy).HasComment("User create article");
-            entity.Property(e => e.CreationDate).HasComment("The datetime when article record is inserted");
-            entity.Property(e => e.LastSaveDate).HasComment("The datetime when article is save");
-            entity.Property(e => e.RefUrl).HasComment("RefURL");
-            entity.Property(e => e.Status).HasComment("Article Status : EDIT, PUBLISH, DELETE...");
+            entity.Property(e => e.Id).ValueGeneratedNever();
 
             entity.HasOne(d => d.Category).WithMany(p => p.Articles)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -53,11 +43,7 @@ public partial class DemoDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("Pk_ArticleContent_Id");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasComment("Primary Key");
-            entity.Property(e => e.ArticleId).HasComment("ArticleId");
-            entity.Property(e => e.Content).HasComment("Article Content");
+            entity.Property(e => e.Id).ValueGeneratedNever();
 
             entity.HasOne(d => d.Article).WithOne(p => p.ArticleContent)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -67,25 +53,14 @@ public partial class DemoDbContext : DbContext
         modelBuilder.Entity<Category>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("Pk_Category_Id");
-
-            entity.Property(e => e.Id).HasComment("Primary Key");
-            entity.Property(e => e.CategoryName).HasComment("Category Name");
-            entity.Property(e => e.ParentId).HasComment("Parent Category");
         });
 
         modelBuilder.Entity<User>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("Pk_User_Id");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasComment("Primary Key");
-            entity.Property(e => e.Email).HasComment("Email");
-            entity.Property(e => e.FirstName).HasComment("First Name");
-            entity.Property(e => e.IsActive)
-                .HasDefaultValueSql("((1))")
-                .HasComment("IsActive");
-            entity.Property(e => e.LastName).HasComment("Last Name");
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -1,8 +1,6 @@
-﻿using Demo.CoreData.Models;
+﻿using Demo.CoreData.Common;
+using Demo.CoreData.Models;
 using Demo.CoreData.Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Demo.CoreData.Repositories
 {

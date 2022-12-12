@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Demo.CoreData
+namespace Demo.CoreData.Common
 {
     public class DbFactory : IDisposable
     {

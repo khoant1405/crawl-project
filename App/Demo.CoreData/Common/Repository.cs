@@ -1,10 +1,7 @@
-﻿using Demo.CoreData.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace Demo.CoreData
+namespace Demo.CoreData.Common
 {
     public class Repository<T> : IRepository<T> where T : class
     {

@@ -10,12 +10,3 @@
     [UrlName] NVARCHAR(500) NULL 
 ) ON [PRIMARY]
 GO
-
-/*Start adding description*/
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Primary Key' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Category', @level2type=N'COLUMN',@level2name=N'Id'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Category Name' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Category', @level2type=N'COLUMN',@level2name='CategoryName'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Parent Category' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Category', @level2type=N'COLUMN',@level2name='ParentId'
-GO
-/*End adding description*/

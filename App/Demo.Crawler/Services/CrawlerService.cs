@@ -1,28 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Demo.CoreData;
-using Demo.CoreData.Repositories.Interfaces;
-using Demo.CoreData.Models;
+﻿using Demo.CoreData.Models;
 using Fizzler.Systems.HtmlAgilityPack;
 using HtmlAgilityPack;
-using System.Text;
 using Demo.Crawler.Common.Contants;
 using System.Net;
 using Demo.Crawler.Services.Interfaces;
-using Demo.CoreData.Repositories;
-using Microsoft.EntityFrameworkCore;
+using Demo.CoreData.Common;
+using Demo.CoreData.Models.View;
+using AutoMapper;
 
 namespace Demo.Crawler.Services
 {
     public class CrawlerService : ICrawlerService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly DemoDbContext _demoDbContext;
+        //private readonly DemoDbContext _demoDbContext;
         //private readonly IArticleRepository _articleRepository;
         private readonly IRepository<Article> _articleRepository;
         private readonly IRepository<ArticleContent> _articleContentRepository;
+        private readonly IMapper _mapper;
 
         public class GZipWebClient : WebClient
         {
@@ -34,14 +29,13 @@ namespace Demo.Crawler.Services
             }
         }
 
-        //public CrawlerService(IUnitOfWork unitOfWork, IArticleRepository articleRepository)
         public CrawlerService(IUnitOfWork unitOfWork, IRepository<Article> articleRepository, IRepository<ArticleContent> articleContentRepository,
-                                DemoDbContext demoDbContext)
+                                IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _articleRepository = articleRepository;
             _articleContentRepository = articleContentRepository;
-            _demoDbContext = demoDbContext;
+            _mapper = mapper;
         }
 
         public async Task StartCrawlerAsync(int? startPage, int? endPage)
@@ -89,7 +83,6 @@ namespace Demo.Crawler.Services
                             ArticleName = articleName,
                             Status = "Publish",
                             CreationDate = dateTime,
-                            LastSaveDate = dateTime,
                             CreationBy = Contants.idAdmin,
                             RefUrl = href,
                             ImageThumb = imageThumb,
@@ -117,10 +110,9 @@ namespace Demo.Crawler.Services
             var saved = await _unitOfWork.CommitAsync();
         }
 
-        public IEnumerable<Article> GetAllArticle()
+        public IEnumerable<ArticleView> GetAllArticle()
         {
-            var articles = _articleRepository.List(x => x.Status == "Publish").OrderByDescending(x=>x.IdDisplay).ToList();
-            //var articles = _demoDbContext.Articles.AsNoTracking().Where(x => x.Status == "Publish").Include(x=>x.ArticleContents);
+            var articles = _articleRepository.List(x => x.Status == "Publish").OrderByDescending(x => x.CreationDate).Select(x => _mapper.Map<ArticleView>(x)).ToList();
             return articles;
         }
     }

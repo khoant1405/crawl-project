@@ -1,16 +1,9 @@
 ﻿using Demo.Crawler.Services;
 using Demo.Crawler.Services.Interfaces;
-using Demo.CoreData.Models;
 using Demo.CoreData.Repositories;
 using Demo.CoreData.Repositories.Interfaces;
-using Demo.CoreData;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Demo.CoreData.Common;
 
 namespace Demo.Crawler.Extensions
 {

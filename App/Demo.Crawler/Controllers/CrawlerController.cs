@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Demo.CoreData.Models;
-using Demo.Crawler.Services;
 using Demo.Crawler.Services.Interfaces;
 using System.Net;
+using Demo.CoreData.Models.View;
 
 namespace Demo.Crawler.Controllers
 {
@@ -35,10 +34,10 @@ namespace Demo.Crawler.Controllers
 
         [Route("[action]")]
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<Article>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<ArticleView>), (int)HttpStatusCode.OK)]
         public ActionResult GetAllArticle()
         {
-            IEnumerable<Article> articles = _crawlerService.GetAllArticle();
+            IEnumerable<ArticleView> articles = _crawlerService.GetAllArticle();
             return Ok(articles);
         }
     }

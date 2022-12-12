@@ -1,10 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Demo.CoreData
+﻿namespace Demo.CoreData.Common
 {
     public class UnitOfWork : IUnitOfWork
     {

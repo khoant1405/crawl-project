@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,42 +8,19 @@ namespace Demo.CoreData.Models;
 [Index("ArticleName", Name = "Nidx_Article_ArticleName")]
 public partial class Article
 {
-    /// <summary>
-    /// Primary Key
-    /// </summary>
     [Key]
     public Guid Id { get; set; }
 
-    /// <summary>
-    /// Article Name
-    /// </summary>
     [StringLength(500)]
     public string ArticleName { get; set; } = null!;
 
-    /// <summary>
-    /// Article Status : EDIT, PUBLISH, DELETE...
-    /// </summary>
     [StringLength(255)]
     public string Status { get; set; } = null!;
 
-    /// <summary>
-    /// The datetime when article record is inserted
-    /// </summary>
     public DateTime? CreationDate { get; set; }
 
-    /// <summary>
-    /// User create article
-    /// </summary>
     public Guid? CreationBy { get; set; }
 
-    /// <summary>
-    /// The datetime when article is save
-    /// </summary>
-    public DateTime? LastSaveDate { get; set; }
-
-    /// <summary>
-    /// RefURL
-    /// </summary>
     [Column("RefURL")]
     [StringLength(255)]
     public string RefUrl { get; set; } = null!;

@@ -22,7 +22,7 @@ set WipeData=true
 :: - /TargetUser:%SQLServerUsername% /TargetPassword:%SQLServerPassword% in all publish command
 set SQLServerInstance=localhost,1433
 set SQLServerUsername=sa
-set SQLServerPassword=14051634
+set SQLServerPassword=1405
 REM *** End Prepare parameters for executing ***
 
 ECHO Begin build SQL Server solution
