@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[ArticleContent]
 (
 	[Id] UNIQUEIDENTIFIER NOT NULL,
-	[ArticleId] UNIQUEIDENTIFIER NOT NULL,
+	[ArticleId] UNIQUEIDENTIFIER UNIQUE NOT NULL,
 	[Content] [nvarchar](MAX) NULL,
 	CONSTRAINT [Pk_ArticleContent_Id] PRIMARY KEY CLUSTERED 
 (

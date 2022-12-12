@@ -61,7 +61,7 @@ public partial class Article
     public int IdDisplay { get; set; }
 
     [InverseProperty("Article")]
-    public virtual ICollection<ArticleContent> ArticleContents { get; } = new List<ArticleContent>();
+    public virtual ArticleContent? ArticleContent { get; set; }
 
     [ForeignKey("CategoryId")]
     [InverseProperty("Articles")]

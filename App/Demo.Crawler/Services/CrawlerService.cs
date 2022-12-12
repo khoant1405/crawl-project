@@ -119,7 +119,7 @@ namespace Demo.Crawler.Services
 
         public IEnumerable<Article> GetAllArticle()
         {
-            var articles = _articleRepository.List(x => x.Status == "Publish").AsNoTracking().OrderByDescending(x=>x.IdDisplay).ToList();
+            var articles = _articleRepository.List(x => x.Status == "Publish").OrderByDescending(x=>x.IdDisplay).ToList();
             //var articles = _demoDbContext.Articles.AsNoTracking().Where(x => x.Status == "Publish").Include(x=>x.ArticleContents);
             return articles;
         }

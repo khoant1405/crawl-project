@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Demo.CoreData.Models;
 
 [Table("ArticleContent")]
+[Index("ArticleId", Name = "UQ__ArticleC__9C6270E936846DA0", IsUnique = true)]
 public partial class ArticleContent
 {
     /// <summary>
@@ -26,6 +27,6 @@ public partial class ArticleContent
     public string? Content { get; set; }
 
     [ForeignKey("ArticleId")]
-    [InverseProperty("ArticleContents")]
+    [InverseProperty("ArticleContent")]
     public virtual Article Article { get; set; } = null!;
 }
