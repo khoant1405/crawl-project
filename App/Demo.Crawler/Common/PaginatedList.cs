@@ -10,15 +10,25 @@
         public bool HasNextPage { get; set; }
         public List<T> Data { get; set; }
 
-        public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
+        public PaginatedList(List<T>? items, int count, int pageIndex, int pageSize, int numberOfPagesShow)
         {
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
             HasPreviousPage = pageIndex > 1;
             HasNextPage = pageIndex < TotalPages;
-            Data = items;
+            Data = items!;
             PageIndex = pageIndex;
-            ShowFromPage = 0;
-            ShowToPage = 0;
+            ShowFromPage = pageIndex - 2 > 0 ? pageIndex - 2 : 1;
+            ShowToPage = pageIndex + 2 > TotalPages ? TotalPages : pageIndex + 2;
+            while (ShowToPage - ShowFromPage + 1 < numberOfPagesShow)
+            {
+                if (ShowToPage < TotalPages)
+                {
+                    ShowToPage++;
+                } else if (ShowFromPage > 1)
+                {
+                    ShowFromPage--;
+                }
+            }
         }
     }
 }
