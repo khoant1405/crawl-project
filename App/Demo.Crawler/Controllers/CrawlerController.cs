@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Demo.Crawler.Services.Interfaces;
 using System.Net;
 using Demo.CoreData.Models.View;
+using Demo.Crawler.Common;
 
 namespace Demo.Crawler.Controllers
 {
@@ -34,7 +35,7 @@ namespace Demo.Crawler.Controllers
 
         [Route("[action]")]
         [HttpGet]
-        [ProducesResponseType(typeof(ArticlePagination), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(PaginatedList<ArticleView>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult> GetAllArticle(int page)
         {
             var articles = await _crawlerService.GetAllArticleAsync(page);

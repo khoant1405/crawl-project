@@ -1,32 +1,24 @@
-﻿using Demo.CoreData.Models;
-using AutoMapper;
-using Demo.CoreData.Models.View;
-using Microsoft.EntityFrameworkCore;
-
-namespace Demo.Crawler.Common
+﻿namespace Demo.Crawler.Common
 {
-    public class PaginatedList<T> : List<T>
+    public class PaginatedList<T>
     {
-        public int PageIndex { get; private set; }
-        public int TotalPages { get; private set; }
+        public int PageIndex { get; set; }
+        public int TotalPages { get; set; }
+        public int ShowFromPage { get; set; }
+        public int ShowToPage { get; set; }
+        public bool HasPreviousPage { get; set; }
+        public bool HasNextPage { get; set; }
+        public List<T> Data { get; set; }
 
         public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
         {
-            PageIndex = pageIndex;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
-
-            this.AddRange(items);
-        }
-
-        public bool HasPreviousPage => PageIndex > 1;
-
-        public bool HasNextPage => PageIndex < TotalPages;
-
-        public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int pageIndex, int pageSize)
-        {
-            var count = await source.CountAsync();
-            var items = await source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
-            return new PaginatedList<T>(items, count, pageIndex, pageSize);
+            HasPreviousPage = pageIndex > 1;
+            HasNextPage = pageIndex < TotalPages;
+            Data = items;
+            PageIndex = pageIndex;
+            ShowFromPage = 0;
+            ShowToPage = 0;
         }
     }
 }

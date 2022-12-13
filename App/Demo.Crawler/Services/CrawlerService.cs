@@ -15,8 +15,6 @@ namespace Demo.Crawler.Services
     public class CrawlerService : ICrawlerService
     {
         private readonly IUnitOfWork _unitOfWork;
-        //private readonly DemoDbContext _demoDbContext;
-        //private readonly IArticleRepository _articleRepository;
         private readonly IRepository<Article> _articleRepository;
         private readonly IRepository<ArticleContent> _articleContentRepository;
         private readonly IMapper _mapper;
@@ -112,24 +110,13 @@ namespace Demo.Crawler.Services
             await _unitOfWork.CommitAsync();
         }
 
-        public async Task<ArticlePagination> GetAllArticleAsync(int page)
+        public async Task<PaginatedList<ArticleView>> GetAllArticleAsync(int page)
         {
             int pageSize = 16;
             var allArticles = _articleRepository.List(x => x.Status == "Publish").OrderByDescending(x => x.CreationDate).AsNoTracking();
             var count = await allArticles.CountAsync();
-            var totalPages = (int)Math.Ceiling(count / (double)pageSize);
-            var hasPreviousPage = page > 1;
-            var hasNextPage = page < totalPages;
             var items = await allArticles.Skip((page - 1) * pageSize).Take(pageSize).Select(x => _mapper.Map<ArticleView>(x)).ToListAsync();
-            //var showFromPage = page - 2 > 0 ? page - 2 : page - 1;
-            return new ArticlePagination
-            {
-                PageIndex = page,
-                TotalPages = totalPages,
-                HasPreviousPage = hasPreviousPage,
-                HasNextPage = hasNextPage,
-                Data = items
-            };
+            return new PaginatedList<ArticleView>(items, count, page, pageSize);
         }
     }
 }
