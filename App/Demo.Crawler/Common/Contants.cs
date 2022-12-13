@@ -7,5 +7,7 @@
         public const string page = "https://thanhnien.vn/cong-nghe-game/san-pham/?trang=";
 
         public static Guid idAdmin = new Guid("99999999-9999-9999-9999-999999999999");
+
+        public const int numberOfPagesShow = 5;
     }
 }

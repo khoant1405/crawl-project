@@ -36,9 +36,9 @@ namespace Demo.Crawler.Controllers
         [Route("[action]")]
         [HttpGet]
         [ProducesResponseType(typeof(PaginatedList<ArticleView>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult> GetArticleFromPage(int page)
+        public async Task<ActionResult> GetArticleFromPage(int page, int pageSize)
         {
-            var articles = await _crawlerService.GetArticleFromPageAsync(page);
+            var articles = await _crawlerService.GetArticleFromPageAsync(page, pageSize);
             return Ok(articles);
         }
     }

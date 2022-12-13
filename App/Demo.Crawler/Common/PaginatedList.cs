@@ -17,16 +17,24 @@
             HasNextPage = pageIndex < TotalPages;
             Data = items!;
             PageIndex = pageIndex;
-            ShowFromPage = pageIndex - 2 > 0 ? pageIndex - 2 : 1;
-            ShowToPage = pageIndex + 2 > TotalPages ? TotalPages : pageIndex + 2;
-            while (ShowToPage - ShowFromPage + 1 < numberOfPagesShow)
+            if (numberOfPagesShow >= TotalPages)
             {
-                if (ShowToPage < TotalPages)
+                ShowFromPage = 1;
+                ShowToPage = TotalPages;
+            } else
+            {
+                ShowFromPage = pageIndex - 2 > 0 ? pageIndex - 2 : 1;
+                ShowToPage = pageIndex + 2 > TotalPages ? TotalPages : pageIndex + 2;
+                while (ShowToPage - ShowFromPage + 1 < numberOfPagesShow)
                 {
-                    ShowToPage++;
-                } else if (ShowFromPage > 1)
-                {
-                    ShowFromPage--;
+                    if (ShowToPage < TotalPages)
+                    {
+                        ShowToPage++;
+                    }
+                    else if (ShowFromPage > 1)
+                    {
+                        ShowFromPage--;
+                    }
                 }
             }
         }

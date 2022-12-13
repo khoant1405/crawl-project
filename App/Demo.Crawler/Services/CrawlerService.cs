@@ -110,20 +110,18 @@ namespace Demo.Crawler.Services
             await _unitOfWork.CommitAsync();
         }
 
-        public async Task<PaginatedList<ArticleView>> GetArticleFromPageAsync(int page)
+        public async Task<PaginatedList<ArticleView>> GetArticleFromPageAsync(int page, int pageSize)
         {
-            int pageSize = 16;
-            int numberOfPagesShow = 5;
             try
             {
                 var allArticles = _articleRepository.List(x => x.Status == "Publish").OrderByDescending(x => x.CreationDate).AsNoTracking();
                 var count = await allArticles.CountAsync();
                 var items = await allArticles.Skip((page - 1) * pageSize).Take(pageSize).Select(x => _mapper.Map<ArticleView>(x)).ToListAsync();
-                return new PaginatedList<ArticleView>(items, count, page, pageSize, numberOfPagesShow);
+                return new PaginatedList<ArticleView>(items, count, page, pageSize, Contants.numberOfPagesShow);
             }
             catch (Exception)
             {
-                return new PaginatedList<ArticleView>(null, 0, page, pageSize, numberOfPagesShow);
+                return new PaginatedList<ArticleView>(null, 0, page, pageSize, Contants.numberOfPagesShow);
             }
         }
     }
