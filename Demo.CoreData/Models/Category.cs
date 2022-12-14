@@ -1,5 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace Demo.CoreData.Models;
 
@@ -16,7 +19,4 @@ public partial class Category
 
     [StringLength(500)]
     public string? UrlName { get; set; }
-
-    [InverseProperty("Category")]
-    public virtual ICollection<Article> Articles { get; } = new List<Article>();
 }
