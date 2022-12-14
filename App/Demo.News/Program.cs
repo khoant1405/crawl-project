@@ -1,4 +1,4 @@
-namespace Demo.Crawler
+namespace Demo.News
 {
     public class Program
     {
