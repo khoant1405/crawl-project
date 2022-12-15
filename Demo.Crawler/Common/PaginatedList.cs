@@ -9,11 +9,9 @@
         public bool HasPreviousPage { get; set; }
         public bool HasNextPage { get; set; }
         public List<T> Data { get; set; }
-        public string test { get; set; }
 
         public PaginatedList(List<T>? items, int count, int pageIndex, int pageSize, int numberOfPagesShow)
         {
-            test = "testCI";
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
             HasPreviousPage = pageIndex > 1;
             HasNextPage = pageIndex < TotalPages;
