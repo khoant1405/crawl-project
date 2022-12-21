@@ -9,6 +9,7 @@ using Demo.CoreData.Models;
 using Demo.Crawler.Services.Interfaces;
 using Demo.CoreData.ViewModels;
 using Demo.Crawler.Common;
+using Demo.CoreData.Entities;
 
 namespace Demo.Crawler.Controllers
 {
@@ -16,14 +17,17 @@ namespace Demo.Crawler.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        public static User user = new User();
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
+        private readonly IRepository<User> _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public AuthController(IConfiguration configuration, IUserService userService)
+        public AuthController(IUnitOfWork unitOfWork, IConfiguration configuration, IUserService userService, IRepository<User> userRepository)
         {
             _configuration = configuration;
             _userService = userService;
+            _userRepository = userRepository;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet, Authorize]
@@ -34,17 +38,22 @@ namespace Demo.Crawler.Controllers
         }
 
         [HttpPost("register")]
-        public ActionResult<User> Register(UserView request)
+        public async Task<ActionResult<User>> RegisterAsync(UserView request)
         {
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
-            user.Id = Guid.NewGuid();
-            user.UserName = request.UserName;
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
-            user.IsActive = true;
+            User newUser = new User();
+            newUser.Id = Guid.NewGuid();
+            newUser.UserName = request.UserName;
+            newUser.PasswordHash = passwordHash;
+            newUser.PasswordSalt = passwordSalt;
+            newUser.IsActive = true;
+            newUser.Role = 2;
 
-            return Ok(user);
+            _userRepository.Add(newUser);
+            await _unitOfWork.CommitAsync();
+
+            return Ok(newUser);
         }
 
         [HttpPost("login")]

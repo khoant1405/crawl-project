@@ -3,6 +3,7 @@ using Demo.Crawler.Services.Interfaces;
 using System.Net;
 using Demo.CoreData.ViewModels;
 using Demo.Crawler.Common;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Demo.Crawler.Controllers
 {
@@ -20,7 +21,7 @@ namespace Demo.Crawler.Controllers
         }
 
         [Route("[action]")]
-        [HttpPost]
+        [HttpPost, Authorize]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<ActionResult> StartCrawler(int startPage, int endPage)
