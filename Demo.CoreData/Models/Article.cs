@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 namespace Demo.CoreData.Models;
 
 [Table("Article")]
-[Index("ArticleName", Name = "Nidx_Article_ArticleName")]
 public partial class Article
 {
     [Key]
@@ -19,9 +18,9 @@ public partial class Article
     [StringLength(255)]
     public string Status { get; set; } = null!;
 
-    public DateTime? CreationDate { get; set; }
+    public DateTime CreationDate { get; set; }
 
-    public Guid? CreationBy { get; set; }
+    public Guid CreationBy { get; set; }
 
     [Column("RefURL")]
     [StringLength(255)]

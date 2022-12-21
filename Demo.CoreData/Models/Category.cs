@@ -15,8 +15,8 @@ public partial class Category
     [StringLength(500)]
     public string CategoryName { get; set; } = null!;
 
-    public int ParentId { get; set; }
+    public int? ParentId { get; set; }
 
     [StringLength(500)]
-    public string? UrlName { get; set; }
+    public string UrlName { get; set; } = null!;
 }

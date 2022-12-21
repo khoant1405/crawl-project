@@ -17,15 +17,15 @@ public partial class User
     [Required]
     public bool? IsActive { get; set; }
 
-    public int Role { get; set; }
+    public int? Role { get; set; }
 
-    public byte[] PasswordHash { get; set; }
+    public byte[] PasswordHash { get; set; } = null!;
 
-    public byte[] PasswordSalt { get; set; }
+    public byte[] PasswordSalt { get; set; } = null!;
 
-    public string RefreshToken { get; set; } = string.Empty;
+    public string? RefreshToken { get; set; }
 
-    public DateTime TokenCreated { get; set; }
+    public DateTime? TokenCreated { get; set; }
 
-    public DateTime TokenExpires { get; set; }
+    public DateTime? TokenExpires { get; set; }
 }

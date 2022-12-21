@@ -37,7 +37,7 @@ namespace Demo.Crawler.Controllers
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(PaginatedList<ArticleView>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult> GetArticleFromPage(int page, int pageSize)
+        public async Task<ActionResult<PaginatedList<ArticleView>>> GetArticleFromPage(int page, int pageSize)
         {
             if (Double.IsNaN((double)page) || Double.IsNaN((double)pageSize))
             {

@@ -34,7 +34,7 @@ namespace Demo.Crawler.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<User>> Register(UserView request)
+        public ActionResult<User> Register(UserView request)
         {
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
