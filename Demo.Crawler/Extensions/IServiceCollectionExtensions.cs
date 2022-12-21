@@ -3,7 +3,7 @@ using Demo.Crawler.Services.Interfaces;
 using Demo.CoreData.Repositories;
 using Demo.CoreData.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Demo.CoreData.Common;
+using Demo.CoreData.Entities;
 
 namespace Demo.Crawler.Extensions
 {
@@ -36,7 +36,8 @@ namespace Demo.Crawler.Extensions
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             return services
-                .AddScoped<ICrawlerService, CrawlerService>();
+                .AddScoped<ICrawlerService, CrawlerService>()
+                .AddScoped<IUserService, UserService>();
         }
     }
 }

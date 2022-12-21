@@ -12,15 +12,20 @@ public partial class User
     [Key]
     public Guid Id { get; set; }
 
-    [StringLength(100)]
     public string UserName { get; set; } = null!;
-
-    [StringLength(255)]
-    public string Email { get; set; } = null!;
 
     [Required]
     public bool? IsActive { get; set; }
 
-    [StringLength(100)]
-    public string Password { get; set; } = null!;
+    public int Role { get; set; }
+
+    public byte[] PasswordHash { get; set; }
+
+    public byte[] PasswordSalt { get; set; }
+
+    public string RefreshToken { get; set; } = string.Empty;
+
+    public DateTime TokenCreated { get; set; }
+
+    public DateTime TokenExpires { get; set; }
 }

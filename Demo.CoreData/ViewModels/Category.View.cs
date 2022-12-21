@@ -1,4 +1,4 @@
-﻿namespace Demo.CoreData.Models.View;
+﻿namespace Demo.CoreData.ViewModels;
 
 public partial class CategoryView
 {

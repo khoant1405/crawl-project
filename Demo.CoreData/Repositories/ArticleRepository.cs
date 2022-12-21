@@ -1,4 +1,4 @@
-﻿using Demo.CoreData.Common;
+﻿using Demo.CoreData.Entities;
 using Demo.CoreData.Models;
 using Demo.CoreData.Repositories.Interfaces;
 

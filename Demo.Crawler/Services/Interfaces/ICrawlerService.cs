@@ -1,4 +1,4 @@
-﻿using Demo.CoreData.Models.View;
+﻿using Demo.CoreData.ViewModels;
 namespace Demo.Crawler.Services.Interfaces;
 using Demo.Crawler.Common;
 

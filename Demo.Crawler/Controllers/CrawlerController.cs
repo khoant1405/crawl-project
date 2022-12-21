@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Demo.Crawler.Services.Interfaces;
 using System.Net;
-using Demo.CoreData.Models.View;
+using Demo.CoreData.ViewModels;
 using Demo.Crawler.Common;
 
 namespace Demo.Crawler.Controllers

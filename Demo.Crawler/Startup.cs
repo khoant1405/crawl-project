@@ -22,6 +22,7 @@ namespace Demo.Crawler
         {
             services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles); ;
             services.AddEndpointsApiExplorer();
+            services.AddHttpContextAccessor();
             services.AddSwaggerGen(options =>
             {
                 options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
@@ -39,25 +40,23 @@ namespace Demo.Crawler
             services.AddServices();
             services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
             services.AddAuthorization();
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(o =>
-            {
-                o.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidIssuer = Configuration["Jwt:Issuer"],
-                    ValidAudience = Configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey
-                    (Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = false,
-                    ValidateIssuerSigningKey = true
-                };
-            });
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
+                    {
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuerSigningKey = true,
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+                                .GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
+                            ValidateIssuer = false,
+                            ValidateAudience = false
+                        };
+                    });
+            services.AddCors(options => options.AddPolicy(name: "NgOrigins",
+                    policy =>
+                    {
+                        policy.WithOrigins("https://localhost:7193/").AllowAnyMethod().AllowAnyHeader();
+                    }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,6 +64,8 @@ namespace Demo.Crawler
         {
             app.UseSwagger();
             app.UseSwaggerUI();
+
+            app.UseCors("NgOrigins");
 
             app.UseHttpsRedirection();
 
@@ -76,7 +77,7 @@ namespace Demo.Crawler
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers().RequireAuthorization();;
+                endpoints.MapControllers();
             });
         }
     }

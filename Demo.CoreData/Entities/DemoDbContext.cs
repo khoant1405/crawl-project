@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Demo.CoreData.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Demo.CoreData.Common;
+namespace Demo.CoreData.Entities;
 
 public partial class DemoDbContext : DbContext
 {

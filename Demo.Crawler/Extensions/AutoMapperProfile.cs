@@ -1,6 +1,6 @@
 ﻿using Demo.CoreData.Models;
 using AutoMapper;
-using Demo.CoreData.Models.View;
+using Demo.CoreData.ViewModels;
 
 namespace Demo.Crawler.Extensions
 {

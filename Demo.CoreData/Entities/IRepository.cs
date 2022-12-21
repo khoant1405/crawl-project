@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Demo.CoreData.Common
+namespace Demo.CoreData.Entities
 {
     public interface IRepository<T> where T : class
     {

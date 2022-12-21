@@ -1,4 +1,4 @@
-﻿namespace Demo.CoreData.Common
+﻿namespace Demo.CoreData.Entities
 {
     public class UnitOfWork : IUnitOfWork
     {

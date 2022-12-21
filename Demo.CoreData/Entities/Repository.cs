@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace Demo.CoreData.Common
+namespace Demo.CoreData.Entities
 {
     public class Repository<T> : IRepository<T> where T : class
     {
