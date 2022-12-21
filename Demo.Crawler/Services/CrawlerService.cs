@@ -38,7 +38,7 @@ namespace Demo.Crawler.Services
             _mapper = mapper;
         }
 
-        public async Task StartCrawlerAsync(int? startPage, int? endPage)
+        public async Task StartCrawlerAsync(int startPage, int endPage)
         {
             string html;
             string htmlArticle;
@@ -46,7 +46,7 @@ namespace Demo.Crawler.Services
             List<Article> listArticle = new List<Article>();
             List<ArticleContent> lisArticleContent = new List<ArticleContent>();
 
-            for (int? i = startPage; i < endPage + 1; i++)
+            for (int i = startPage; i < endPage + 1; i++)
             {
                 html = webClient.DownloadString($"{Contants.page}{i}");
                 HtmlDocument document = new HtmlDocument();
@@ -92,7 +92,7 @@ namespace Demo.Crawler.Services
                         };
                         listArticle.Add(newArticle);
 
-                        ArticleContent newArticleContent = new ArticleContent()
+                        ArticleContent newArticleContent = new()
                         {
                             Id = Guid.NewGuid(),
                             Content = content,

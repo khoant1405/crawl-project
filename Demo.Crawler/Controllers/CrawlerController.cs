@@ -23,9 +23,9 @@ namespace Demo.Crawler.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<ActionResult> StartCrawler(int? startPage, int? endPage)
+        public async Task<ActionResult> StartCrawler(int startPage, int endPage)
         {
-            if (startPage == null || endPage == null)
+            if (Double.IsNaN((double)startPage) || Double.IsNaN((double)endPage))
             {
                 return BadRequest("Invalid Page");
             }
@@ -35,9 +35,14 @@ namespace Demo.Crawler.Controllers
 
         [Route("[action]")]
         [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(PaginatedList<ArticleView>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult> GetArticleFromPage(int page, int pageSize)
         {
+            if (Double.IsNaN((double)page) || Double.IsNaN((double)pageSize))
+            {
+                return BadRequest("Invalid Page");
+            }
             var articles = await _crawlerService.GetArticleFromPageAsync(page, pageSize);
             return Ok(articles);
         }
