@@ -46,17 +46,18 @@ namespace Demo.Crawler
                         options.TokenValidationParameters = new TokenValidationParameters
                         {
                             ValidateIssuerSigningKey = true,
-                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
-                                .GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("JWT:Token").Value)),
                             ValidateIssuer = false,
-                            ValidateAudience = false
+                            ValidateAudience = false,
+                            ValidAudience = Configuration.GetSection("JWT:ValidAudience").Value,
+                            ValidIssuer = Configuration.GetSection("JWT:ValidIssuer").Value
                         };
                     });
-            services.AddCors(options => options.AddPolicy(name: "NgOrigins",
-                    policy =>
-                    {
-                        policy.WithOrigins("https://localhost:7193/").AllowAnyMethod().AllowAnyHeader();
-                    }));
+            //services.AddCors(options => options.AddPolicy(name: "NgOrigins",
+            //        policy =>
+            //        {
+            //            policy.WithOrigins("https://localhost:7193/").AllowAnyMethod().AllowAnyHeader();
+            //        }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,7 +66,7 @@ namespace Demo.Crawler
             app.UseSwagger();
             app.UseSwaggerUI();
 
-            app.UseCors("NgOrigins");
+            //app.UseCors("NgOrigins");
 
             app.UseHttpsRedirection();
 

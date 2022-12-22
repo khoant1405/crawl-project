@@ -7,17 +7,20 @@ using Microsoft.EntityFrameworkCore;
 namespace Demo.CoreData.Models;
 
 [Table("User")]
+[Index("UserName", Name = "UQ__User__C9F2845693F7C549", IsUnique = true)]
 public partial class User
 {
     [Key]
     public Guid Id { get; set; }
 
+    [StringLength(50)]
     public string UserName { get; set; } = null!;
 
     [Required]
     public bool? IsActive { get; set; }
 
-    public int? Role { get; set; }
+    [StringLength(50)]
+    public string Role { get; set; } = null!;
 
     public byte[] PasswordHash { get; set; } = null!;
 

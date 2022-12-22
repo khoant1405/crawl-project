@@ -10,6 +10,7 @@ using Demo.Crawler.Services.Interfaces;
 using Demo.CoreData.ViewModels;
 using Demo.Crawler.Common;
 using Demo.CoreData.Entities;
+using System.Text;
 
 namespace Demo.Crawler.Controllers
 {
@@ -38,7 +39,7 @@ namespace Demo.Crawler.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<User>> RegisterAsync(UserView request)
+        public async Task<ActionResult<User>> Register(UserView request)
         {
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
@@ -48,7 +49,7 @@ namespace Demo.Crawler.Controllers
             newUser.PasswordHash = passwordHash;
             newUser.PasswordSalt = passwordSalt;
             newUser.IsActive = true;
-            newUser.Role = 2;
+            newUser.Role = "Member";
 
             _userRepository.Add(newUser);
             await _unitOfWork.CommitAsync();
@@ -57,9 +58,10 @@ namespace Demo.Crawler.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(UserView request)
+        public async Task<ActionResult<TokenModel>> LoginAsync(UserView request)
         {
-            if (user.UserName != request.UserName)
+            var user = _userService.GetUserByUserName(request.UserName);
+            if (user == null)
             {
                 return BadRequest("User not found.");
             }
@@ -70,32 +72,65 @@ namespace Demo.Crawler.Controllers
             }
 
             string token = CreateToken(user);
-
             var refreshToken = GenerateRefreshToken();
-            SetRefreshToken(refreshToken);
+            SetRefreshToken(user, refreshToken);
 
-            return Ok(token);
+            _userRepository.Update(user);
+            await _unitOfWork.CommitAsync();
+
+            return Ok(new TokenModel()
+            {
+                AccessToken = token,
+                RefreshToken = refreshToken.Token,
+            });
         }
 
         [HttpPost("refresh-token")]
-        public async Task<ActionResult<string>> RefreshToken()
+        public async Task<ActionResult<TokenModel>> RefreshToken(TokenModel tokenModel)
         {
-            var refreshToken = Request.Cookies["refreshToken"];
+            //var refreshToken = Request.Cookies["refreshToken"];
 
-            if (!user.RefreshToken.Equals(refreshToken))
+            if (tokenModel is null)
             {
-                return Unauthorized("Invalid Refresh Token.");
-            }
-            else if(user.TokenExpires < DateTime.Now)
-            {
-                return Unauthorized("Token expired.");
+                return BadRequest("Invalid client request");
             }
 
-            string token = CreateToken(user);
+            string? accessToken = tokenModel.AccessToken;
+            string? refreshToken = tokenModel.RefreshToken;
+
+            var principal = GetPrincipalFromExpiredToken(accessToken);
+            if (principal == null)
+            {
+                return BadRequest("Invalid access token");
+            }
+
+            string userName = principal.Identity.Name;
+            var user = _userService.GetUserByUserName(userName);
+            if (user == null)
+            {
+                return BadRequest("Invalid access token");
+            }
+            if (user.RefreshToken != refreshToken)
+            {
+                return BadRequest("Invalid refresh token");
+            }
+            if (user.TokenExpires <= DateTime.Now)
+            {
+                return BadRequest("Token expired");
+            }
+
+            var newAccessToken = CreateToken(user);
             var newRefreshToken = GenerateRefreshToken();
-            SetRefreshToken(newRefreshToken);
+            SetRefreshToken(user, newRefreshToken);
 
-            return Ok(token);
+            _userRepository.Update(user);
+            await _unitOfWork.CommitAsync();
+
+            return Ok(new TokenModel()
+            {
+                AccessToken = newAccessToken,
+                RefreshToken = newRefreshToken.Token,
+            });
         }
 
         private RefreshToken GenerateRefreshToken()
@@ -110,14 +145,14 @@ namespace Demo.Crawler.Controllers
             return refreshToken;
         }
 
-        private void SetRefreshToken(RefreshToken newRefreshToken)
+        private void SetRefreshToken(User user, RefreshToken newRefreshToken)
         {
-            var cookieOptions = new CookieOptions
-            {
-                HttpOnly = true,
-                Expires = newRefreshToken.Expires
-            };
-            Response.Cookies.Append("refreshToken", newRefreshToken.Token, cookieOptions);
+            //var cookieOptions = new CookieOptions
+            //{
+            //    HttpOnly = true,
+            //    Expires = newRefreshToken.Expires
+            //};
+            //Response.Cookies.Append("refreshToken", newRefreshToken.Token, cookieOptions);
 
             user.RefreshToken = newRefreshToken.Token;
             user.TokenCreated = newRefreshToken.Created;
@@ -129,17 +164,18 @@ namespace Demo.Crawler.Controllers
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Role, "Admin")
+                new Claim(ClaimTypes.Role, user.Role)
             };
 
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
-                _configuration.GetSection("AppSettings:Token").Value));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                _configuration.GetSection("JWT:Token").Value));
+            int tokenValidityInMinutes = int.Parse(_configuration.GetSection("JWT:TokenValidityInMinutes").Value);
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddDays(1),
+                expires: DateTime.Now.AddMinutes(tokenValidityInMinutes),
                 signingCredentials: creds);
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
@@ -163,6 +199,27 @@ namespace Demo.Crawler.Controllers
                 var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 return computedHash.SequenceEqual(passwordHash);
             }
+        }
+
+        private ClaimsPrincipal? GetPrincipalFromExpiredToken(string? token)
+        {
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("JWT:Token").Value)),
+                ValidateIssuer = false,
+                ValidateAudience = false
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
+            if (securityToken is not JwtSecurityToken jwtSecurityToken || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha512Signature, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return null;
+            }
+
+            return principal;
+
         }
     }
 }
