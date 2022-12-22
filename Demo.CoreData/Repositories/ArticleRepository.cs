@@ -2,18 +2,17 @@
 using Demo.CoreData.Models;
 using Demo.CoreData.Repositories.Interfaces;
 
-namespace Demo.CoreData.Repositories
-{
-    public class ArticleRepository : Repository<Article>, IArticleRepository
-    {
-        public ArticleRepository(DbFactory dbFactory) : base(dbFactory)
-        {
-        }
+namespace Demo.CoreData.Repositories;
 
-        public Article CreateNewArticle(Article Article)
-        {
-            this.Add(Article);
-            return Article;
-        }
+public class ArticleRepository : Repository<Article>, IArticleRepository
+{
+    public ArticleRepository(DbFactory dbFactory) : base(dbFactory)
+    {
+    }
+
+    public Article CreateNewArticle(Article Article)
+    {
+        Add(Article);
+        return Article;
     }
 }

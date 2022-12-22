@@ -1,26 +1,26 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Demo.CoreData.Entities
+namespace Demo.CoreData.Entities;
+
+public class DbFactory : IDisposable
 {
-    public class DbFactory : IDisposable
+    private readonly Func<DemoDbContext> _instanceFunc;
+    private DbContext _dbContext;
+    private bool _disposed;
+
+    public DbFactory(Func<DemoDbContext> dbContextFactory)
     {
-        private bool _disposed;
-        private Func<DemoDbContext> _instanceFunc;
-        private DbContext _dbContext;
-        public DbContext DbContext => _dbContext ?? (_dbContext = _instanceFunc.Invoke());
+        _instanceFunc = dbContextFactory;
+    }
 
-        public DbFactory(Func<DemoDbContext> dbContextFactory)
-        {
-            _instanceFunc = dbContextFactory;
-        }
+    public DbContext DbContext => _dbContext ?? (_dbContext = _instanceFunc.Invoke());
 
-        public void Dispose()
+    public void Dispose()
+    {
+        if (!_disposed && _dbContext != null)
         {
-            if (!_disposed && _dbContext != null)
-            {
-                _disposed = true;
-                _dbContext.Dispose();
-            }
+            _disposed = true;
+            _dbContext.Dispose();
         }
     }
 }

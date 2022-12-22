@@ -1,6 +1,7 @@
 ﻿using Demo.CoreData.ViewModels;
-namespace Demo.Crawler.Services.Interfaces;
 using Demo.Crawler.Common;
+
+namespace Demo.Crawler.Services.Interfaces;
 
 public interface ICrawlerService
 {

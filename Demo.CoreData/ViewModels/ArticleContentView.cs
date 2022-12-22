@@ -1,6 +1,6 @@
 ﻿namespace Demo.CoreData.ViewModels;
 
-public partial class ArticleContentView
+public class ArticleContentView
 {
     public Guid Id { get; set; }
 

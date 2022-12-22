@@ -1,14 +1,13 @@
-﻿using Demo.CoreData.Models;
-using AutoMapper;
+﻿using AutoMapper;
+using Demo.CoreData.Models;
 using Demo.CoreData.ViewModels;
 
-namespace Demo.Crawler.Extensions
+namespace Demo.Crawler.Extensions;
+
+public class AutoMapperProfile : Profile
 {
-    public class AutoMapperProfile : Profile
+    public AutoMapperProfile()
     {
-        public AutoMapperProfile()
-        {
-            CreateMap<Article, ArticleView>();
-        }
+        CreateMap<Article, ArticleView>();
     }
 }

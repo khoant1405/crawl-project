@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Demo.CoreData.Models;
+﻿using Demo.CoreData.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Demo.CoreData.Entities;
@@ -25,8 +23,9 @@ public partial class DemoDbContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=localhost,1433;User ID=sa;Password=1405;TrustServerCertificate=True;Initial Catalog=CoreData;");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https: //go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer(
+            "Server=localhost,1433;User ID=sa;Password=1405;TrustServerCertificate=True;Initial Catalog=CoreData;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -48,10 +47,7 @@ public partial class DemoDbContext : DbContext
                 .HasConstraintName("Fk_ArticleContent_ArticleId");
         });
 
-        modelBuilder.Entity<Category>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("Pk_Category_Id");
-        });
+        modelBuilder.Entity<Category>(entity => { entity.HasKey(e => e.Id).HasName("Pk_Category_Id"); });
 
         modelBuilder.Entity<User>(entity =>
         {

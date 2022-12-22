@@ -1,6 +1,6 @@
 ﻿namespace Demo.CoreData.ViewModels;
 
-public partial class CategoryView
+public class CategoryView
 {
     public int Id { get; set; }
 

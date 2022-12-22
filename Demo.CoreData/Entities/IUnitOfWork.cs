@@ -1,7 +1,6 @@
-﻿namespace Demo.CoreData.Entities
+﻿namespace Demo.CoreData.Entities;
+
+public interface IUnitOfWork
 {
-    public interface IUnitOfWork
-    {
-        Task<int> CommitAsync();
-    }
+    Task<int> CommitAsync();
 }

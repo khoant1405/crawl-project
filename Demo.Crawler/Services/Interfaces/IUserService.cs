@@ -1,9 +1,9 @@
 ﻿using Demo.CoreData.Models;
-namespace Demo.Crawler.Services.Interfaces
+
+namespace Demo.Crawler.Services.Interfaces;
+
+public interface IUserService
 {
-    public interface IUserService
-    {
-        string GetMyName();
-        User? GetUserByUserName(string userName);
-    }
+    string GetMyName();
+    User? GetUserByUserName(string? userName);
 }

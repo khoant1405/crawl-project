@@ -1,17 +1,16 @@
-﻿namespace Demo.CoreData.Entities
+﻿namespace Demo.CoreData.Entities;
+
+public class UnitOfWork : IUnitOfWork
 {
-    public class UnitOfWork : IUnitOfWork
+    private readonly DbFactory _dbFactory;
+
+    public UnitOfWork(DbFactory dbFactory)
     {
-        private DbFactory _dbFactory;
+        _dbFactory = dbFactory;
+    }
 
-        public UnitOfWork(DbFactory dbFactory)
-        {
-            _dbFactory = dbFactory;
-        }
-
-        public Task<int> CommitAsync()
-        {
-            return _dbFactory.DbContext.SaveChangesAsync();
-        }
+    public Task<int> CommitAsync()
+    {
+        return _dbFactory.DbContext.SaveChangesAsync();
     }
 }

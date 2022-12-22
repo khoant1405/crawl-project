@@ -1,43 +1,42 @@
-﻿using Demo.Crawler.Services;
-using Demo.Crawler.Services.Interfaces;
+﻿using Demo.CoreData.Entities;
 using Demo.CoreData.Repositories;
 using Demo.CoreData.Repositories.Interfaces;
+using Demo.Crawler.Services;
+using Demo.Crawler.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Demo.CoreData.Entities;
 
-namespace Demo.Crawler.Extensions
+namespace Demo.Crawler.Extensions;
+
+public static class IServiceCollectionExtensions
 {
-    public static class IServiceCollectionExtensions
+    public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
     {
-        public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
-        {
-            // Configure DbContext with Scoped lifetime
-            services.AddDbContext<DemoDbContext>(options =>
-                {
-                    options.UseSqlServer(configuration.GetConnectionString("CoreData"));
-                    options.UseLazyLoadingProxies();
-                }
-            );
+        // Configure DbContext with Scoped lifetime
+        services.AddDbContext<DemoDbContext>(options =>
+            {
+                options.UseSqlServer(configuration.GetConnectionString("CoreData"));
+                options.UseLazyLoadingProxies();
+            }
+        );
 
-            services.AddScoped<Func<DemoDbContext>>((provider) => () => provider.GetService<DemoDbContext>());
-            services.AddScoped<DbFactory>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<Func<DemoDbContext>>(provider => () => provider.GetService<DemoDbContext>());
+        services.AddScoped<DbFactory>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            return services;
-        }
+        return services;
+    }
 
-        public static IServiceCollection AddRepositories(this IServiceCollection services)
-        {
-            return services
-                .AddScoped(typeof(IRepository<>), typeof(Repository<>))
-                .AddScoped<IArticleRepository, ArticleRepository>();
-        }
+    public static IServiceCollection AddRepositories(this IServiceCollection services)
+    {
+        return services
+            .AddScoped(typeof(IRepository<>), typeof(Repository<>))
+            .AddScoped<IArticleRepository, ArticleRepository>();
+    }
 
-        public static IServiceCollection AddServices(this IServiceCollection services)
-        {
-            return services
-                .AddScoped<ICrawlerService, CrawlerService>()
-                .AddScoped<IUserService, UserService>();
-        }
+    public static IServiceCollection AddServices(this IServiceCollection services)
+    {
+        return services
+            .AddScoped<ICrawlerService, CrawlerService>()
+            .AddScoped<IUserService, UserService>();
     }
 }
