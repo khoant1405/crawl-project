@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Demo.CoreData.Models;
 
 [Table("ArticleContent")]
-[Index("ArticleId", Name = "UQ__ArticleC__9C6270E9038E9427", IsUnique = true)]
+[Index("ArticleId", Name = "UQ__ArticleC__9C6270E9AEEB61EB", IsUnique = true)]
 public class ArticleContent
 {
     [Key] public Guid Id { get; set; }

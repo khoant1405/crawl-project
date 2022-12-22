@@ -13,7 +13,7 @@ public class DbFactory : IDisposable
         _instanceFunc = dbContextFactory;
     }
 
-    public DbContext DbContext => _dbContext ?? (_dbContext = _instanceFunc.Invoke());
+    public DbContext DbContext => _dbContext ??= _instanceFunc.Invoke();
 
     public void Dispose()
     {

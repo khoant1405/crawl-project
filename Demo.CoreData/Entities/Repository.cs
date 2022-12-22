@@ -13,7 +13,7 @@ public class Repository<T> : IRepository<T> where T : class
         _dbFactory = dbFactory;
     }
 
-    protected DbSet<T> DbSet => _dbSet ?? (_dbSet = _dbFactory.DbContext.Set<T>());
+    protected DbSet<T> DbSet => _dbSet ??= _dbFactory.DbContext.Set<T>();
 
     public void Add(T entity)
     {

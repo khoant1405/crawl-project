@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace Demo.CoreData.Models;
 
 [Table("Article")]
+[Index("IdDisplay", Name = "UQ__Article__BEDCC22AAFA6C8A7", IsUnique = true)]
 public class Article
 {
     [Key] public Guid Id { get; set; }
