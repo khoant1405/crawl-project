@@ -30,15 +30,13 @@ public class CrawlerService : ICrawlerService
 
     public async Task StartCrawlerAsync(int startPage, int endPage)
     {
-        string html;
-        string htmlArticle;
         var webClient = new GZipWebClient();
         var listArticle = new List<Article>();
         var lisArticleContent = new List<ArticleContent>();
 
         for (var i = startPage; i < endPage + 1; i++)
         {
-            html = webClient.DownloadString($"{Contants.page}{i}");
+            var html = webClient.DownloadString($"{Constant.Page}{i}");
             var document = new HtmlDocument();
             document.LoadHtml(html);
             List<HtmlNode> articles = document.DocumentNode.QuerySelectorAll("div.zone--timeline > article").ToList();
@@ -56,7 +54,7 @@ public class CrawlerService : ICrawlerService
                     var imageThumb = article.QuerySelector("img")?.Attributes["data-src"].Value;
                     var description = item.QuerySelector("div > div.summary > p")?.InnerText.Replace("\n", "");
 
-                    htmlArticle = webClient.DownloadString(href);
+                    var htmlArticle = webClient.DownloadString(href);
                     var documentArticle = new HtmlDocument();
                     documentArticle.LoadHtml(htmlArticle);
                     var content = documentArticle.DocumentNode.QuerySelector("div.cms-body")?.OuterHtml;
@@ -70,7 +68,7 @@ public class CrawlerService : ICrawlerService
                         ArticleName = articleName,
                         Status = "Publish",
                         CreationDate = dateTime,
-                        CreationBy = Contants.idAdmin,
+                        CreationBy = Constant.IdAdmin,
                         RefUrl = href,
                         ImageThumb = imageThumb,
                         Description = description,
@@ -106,11 +104,11 @@ public class CrawlerService : ICrawlerService
             var count = await allArticles.CountAsync();
             var items = await allArticles.Skip((page - 1) * pageSize).Take(pageSize)
                 .Select(x => _mapper.Map<ArticleView>(x)).ToListAsync();
-            return new PaginatedList<ArticleView>(items, count, page, pageSize, Contants.numberOfPagesShow);
+            return new PaginatedList<ArticleView>(items, count, page, pageSize, Constant.NumberOfPagesShow);
         }
         catch (Exception)
         {
-            return new PaginatedList<ArticleView>(null, 0, page, pageSize, Contants.numberOfPagesShow);
+            return new PaginatedList<ArticleView>(null, 0, page, pageSize, Constant.NumberOfPagesShow);
         }
     }
 

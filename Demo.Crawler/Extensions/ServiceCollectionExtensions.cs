@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Demo.Crawler.Extensions;
 
-public static class IServiceCollectionExtensions
+public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
     {
@@ -19,7 +19,7 @@ public static class IServiceCollectionExtensions
             }
         );
 
-        services.AddScoped<Func<DemoDbContext>>(provider => () => provider.GetService<DemoDbContext>());
+        services.AddScoped<Func<DemoDbContext>>(provider => () => provider.GetService<DemoDbContext>()!);
         services.AddScoped<DbFactory>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 

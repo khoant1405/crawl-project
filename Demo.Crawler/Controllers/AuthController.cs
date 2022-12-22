@@ -35,8 +35,8 @@ public class AuthController : ControllerBase
     [Authorize]
     public ActionResult<string> GetMe()
     {
-        var UserName = _userService.GetMyName();
-        return Ok(UserName);
+        var userName = _userService.GetMyName();
+        return Ok(userName);
     }
 
     [HttpPost("register")]
@@ -84,7 +84,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("refresh-token")]
-    public async Task<ActionResult<TokenModel>> RefreshToken(TokenModel tokenModel)
+    public async Task<ActionResult<TokenModel>> RefreshToken(TokenModel? tokenModel)
     {
         //var refreshToken = Request.Cookies["refreshToken"];
 
@@ -151,15 +151,15 @@ public class AuthController : ControllerBase
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-            _configuration.GetSection("JWT:Token").Value));
-        var tokenValidityInMinutes = int.Parse(_configuration.GetSection("JWT:TokenValidityInMinutes").Value);
+            _configuration.GetSection("JWT:Token").Value!));
+        var tokenValidityInMinutes = int.Parse(_configuration.GetSection("JWT:TokenValidityInMinutes").Value!);
 
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+        var credential = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
         var token = new JwtSecurityToken(
             claims: claims,
             expires: DateTime.Now.AddMinutes(tokenValidityInMinutes),
-            signingCredentials: creds);
+            signingCredentials: credential);
 
         var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
@@ -186,7 +186,7 @@ public class AuthController : ControllerBase
         {
             ValidateIssuerSigningKey = true,
             IssuerSigningKey =
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("JWT:Token").Value)),
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("JWT:Token").Value!)),
             ValidateIssuer = false,
             ValidateAudience = false
         };

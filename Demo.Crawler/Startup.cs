@@ -22,7 +22,6 @@ public class Startup
     {
         services.AddControllers()
             .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-        ;
         services.AddEndpointsApiExplorer();
         services.AddHttpContextAccessor();
         services.AddSwaggerGen(options =>
@@ -49,7 +48,7 @@ public class Startup
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey =
-                        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("JWT:Token").Value)),
+                        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("JWT:Token").Value!)),
                     ValidateIssuer = false,
                     ValidateAudience = false,
                     ValidAudience = Configuration.GetSection("JWT:ValidAudience").Value,

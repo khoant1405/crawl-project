@@ -10,9 +10,9 @@ public class ArticleRepository : Repository<Article>, IArticleRepository
     {
     }
 
-    public Article CreateNewArticle(Article Article)
+    public Article CreateNewArticle(Article article)
     {
-        Add(Article);
-        return Article;
+        Add(article);
+        return article;
     }
 }
