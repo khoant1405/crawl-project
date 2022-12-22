@@ -88,9 +88,13 @@ public class CrawlerService : ICrawlerService
             }
         }
 
-        _articleRepository.AddRange(listArticle);
+        var listArticleDistinct = listArticle.DistinctBy(x => x.IdDisplay).ToList();
+        var lisArticleContentDistinct =
+            lisArticleContent.Where(x => listArticleDistinct.Exists(y => y.Id == x.ArticleId)).ToList();
 
-        _articleContentRepository.AddRange(lisArticleContent);
+        _articleRepository.AddRange(listArticleDistinct);
+
+        _articleContentRepository.AddRange(lisArticleContentDistinct);
 
         await _unitOfWork.CommitAsync();
     }
