@@ -30,6 +30,11 @@ public class Repository<T> : IRepository<T> where T : class
         DbSet.Remove(entity);
     }
 
+    public void DeleteRange(List<T> entity)
+    {
+        DbSet.RemoveRange(entity);
+    }
+
     public IQueryable<T> List(Expression<Func<T, bool>> expression)
     {
         return DbSet.Where(expression);
