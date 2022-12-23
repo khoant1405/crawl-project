@@ -37,6 +37,7 @@ public static class ServiceCollectionExtensions
     {
         return services
             .AddScoped<ICrawlerService, CrawlerService>()
+            .AddScoped<IAuthService, AuthService>()
             .AddScoped<IUserService, UserService>();
     }
 }

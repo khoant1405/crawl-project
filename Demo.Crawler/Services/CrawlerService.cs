@@ -45,46 +45,44 @@ public class CrawlerService : ICrawlerService
             {
                 var article = item.QuerySelector("a");
 
-                if (article != null)
+                if (article == null) continue;
+                var articleId = Guid.NewGuid();
+                var idDisplay = int.Parse(item.Attributes["data-id"].Value);
+                var articleName = article.Attributes["title"].Value;
+                var href = article.Attributes["href"].Value;
+                var imageThumb = article.QuerySelector("img")?.Attributes["data-src"].Value;
+                var description = item.QuerySelector("div > div.summary > p")?.InnerText.Replace("\n", "");
+
+                var htmlArticle = webClient.DownloadString(href);
+                var documentArticle = new HtmlDocument();
+                documentArticle.LoadHtml(htmlArticle);
+                var content = documentArticle.DocumentNode.QuerySelector("div.cms-body")?.OuterHtml;
+                var time = documentArticle.DocumentNode.QuerySelector("meta.cms-date")?.Attributes["content"].Value;
+                var dateTime = new DateTime();
+                if (time != null) dateTime = DateTime.Parse(time);
+
+                var newArticle = new Article
                 {
-                    var articleId = Guid.NewGuid();
-                    var idDisplay = int.Parse(item.Attributes["data-id"].Value);
-                    var articleName = article.Attributes["title"].Value;
-                    var href = article.Attributes["href"].Value;
-                    var imageThumb = article.QuerySelector("img")?.Attributes["data-src"].Value;
-                    var description = item.QuerySelector("div > div.summary > p")?.InnerText.Replace("\n", "");
+                    Id = articleId,
+                    ArticleName = articleName,
+                    Status = "Publish",
+                    CreationDate = dateTime,
+                    CreationBy = Constant.IdAdmin,
+                    RefUrl = href,
+                    ImageThumb = imageThumb,
+                    Description = description,
+                    CategoryId = 12,
+                    IdDisplay = idDisplay
+                };
+                listArticle.Add(newArticle);
 
-                    var htmlArticle = webClient.DownloadString(href);
-                    var documentArticle = new HtmlDocument();
-                    documentArticle.LoadHtml(htmlArticle);
-                    var content = documentArticle.DocumentNode.QuerySelector("div.cms-body")?.OuterHtml;
-                    var time = documentArticle.DocumentNode.QuerySelector("meta.cms-date")?.Attributes["content"].Value;
-                    var dateTime = new DateTime();
-                    if (time != null) dateTime = DateTime.Parse(time);
-
-                    var newArticle = new Article
-                    {
-                        Id = articleId,
-                        ArticleName = articleName,
-                        Status = "Publish",
-                        CreationDate = dateTime,
-                        CreationBy = Constant.IdAdmin,
-                        RefUrl = href,
-                        ImageThumb = imageThumb,
-                        Description = description,
-                        CategoryId = 12,
-                        IdDisplay = idDisplay
-                    };
-                    listArticle.Add(newArticle);
-
-                    ArticleContent newArticleContent = new()
-                    {
-                        Id = Guid.NewGuid(),
-                        Content = content,
-                        ArticleId = articleId
-                    };
-                    lisArticleContent.Add(newArticleContent);
-                }
+                ArticleContent newArticleContent = new()
+                {
+                    Id = Guid.NewGuid(),
+                    Content = content,
+                    ArticleId = articleId
+                };
+                lisArticleContent.Add(newArticleContent);
             }
         }
 
