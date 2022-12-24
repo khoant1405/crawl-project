@@ -12,6 +12,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JSN.Crawler", "JSN.Crawler\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JSN.CoreData", "JSN.CoreData\JSN.CoreData.csproj", "{05E06BE5-36B5-4C23-95E0-A8D01DBBF511}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JSN.App", "JSN.App\JSN.App.csproj", "{91818162-32C7-4132-88BB-7DF81A0BF86E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{05E06BE5-36B5-4C23-95E0-A8D01DBBF511}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05E06BE5-36B5-4C23-95E0-A8D01DBBF511}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05E06BE5-36B5-4C23-95E0-A8D01DBBF511}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91818162-32C7-4132-88BB-7DF81A0BF86E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91818162-32C7-4132-88BB-7DF81A0BF86E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91818162-32C7-4132-88BB-7DF81A0BF86E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91818162-32C7-4132-88BB-7DF81A0BF86E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,3 @@
-using System.Net;
 using JSN.CoreData.ViewModels;
 using JSN.Crawler.Common;
 using JSN.Crawler.Services.Interfaces;
