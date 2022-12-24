@@ -33,7 +33,8 @@ public class CrawlerService : ICrawlerService
         var webClient = new GZipWebClient();
         var listArticle = new List<Article>();
         var lisArticleContent = new List<ArticleContent>();
-        var listIdDisplay = _articleRepository.List(x => x.Status == "Publish").AsNoTracking().Select(x => x.IdDisplay).ToList();
+        var listIdDisplay = _articleRepository.List(x => x.Status == "Publish").AsNoTracking().Select(x => x.IdDisplay)
+            .ToList();
 
         for (var i = startPage; i < endPage + 1; i++)
         {
