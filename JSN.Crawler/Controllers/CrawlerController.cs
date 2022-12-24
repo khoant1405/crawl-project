@@ -20,11 +20,8 @@ public class CrawlerController : ControllerBase
         _crawlerService = crawlerService;
     }
 
-    [Route("[action]")]
-    [HttpPost]
+    [HttpPost("[action]")]
     [Authorize]
-    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType((int)HttpStatusCode.OK)]
     public async Task<ActionResult> StartCrawler(int startPage, int endPage)
     {
         if (double.IsNaN(startPage) || double.IsNaN(endPage)) return BadRequest("Invalid Page");
@@ -32,10 +29,7 @@ public class CrawlerController : ControllerBase
         return Ok();
     }
 
-    [Route("[action]")]
-    [HttpGet]
-    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(PaginatedList<ArticleView>), (int)HttpStatusCode.OK)]
+    [HttpGet("[action]")]
     public async Task<ActionResult<PaginatedList<ArticleView>>> GetArticleFromPage(int page, int pageSize)
     {
         if (double.IsNaN(page) || double.IsNaN(pageSize)) return BadRequest("Invalid Page");
