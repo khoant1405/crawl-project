@@ -33,7 +33,7 @@ public class CrawlerService : ICrawlerService
         var webClient = new GZipWebClient();
         var listArticle = new List<Article>();
         var lisArticleContent = new List<ArticleContent>();
-        var listIdDisplay = _articleRepository.List(x => x.Status == "Publish").Select(x => x.IdDisplay).ToList();
+        var listIdDisplay = _articleRepository.List(x => x.Status == "Publish").AsNoTracking().Select(x => x.IdDisplay).ToList();
 
         for (var i = startPage; i < endPage + 1; i++)
         {
@@ -49,7 +49,7 @@ public class CrawlerService : ICrawlerService
                 if (article == null) continue;
 
                 var idDisplay = int.Parse(item.Attributes["data-id"].Value);
-                if (listIdDisplay.Exists(x => x == idDisplay)) continue;
+                if (listIdDisplay.Any(x => x == idDisplay) || listArticle.Any(x => x.IdDisplay == idDisplay)) continue;
 
                 var articleId = Guid.NewGuid();
                 var articleName = article.Attributes["title"].Value;
@@ -90,15 +90,14 @@ public class CrawlerService : ICrawlerService
             }
         }
 
-        var listArticleDistinct = listArticle.DistinctBy(x => x.IdDisplay).ToList();
-        var lisArticleContentDistinct =
-            lisArticleContent.Where(x => listArticleDistinct.Exists(y => y.Id == x.ArticleId)).ToList();
+        if (listArticle.Any())
+        {
+            _articleRepository.AddRange(listArticle);
 
-        _articleRepository.AddRange(listArticleDistinct);
+            _articleContentRepository.AddRange(lisArticleContent);
 
-        _articleContentRepository.AddRange(lisArticleContentDistinct);
-
-        await _unitOfWork.CommitAsync();
+            await _unitOfWork.CommitAsync();
+        }
     }
 
     public async Task<PaginatedList<ArticleView>> GetArticleFromPageAsync(int page, int pageSize)
