@@ -110,11 +110,11 @@ public class CrawlerService : ICrawlerService
             var count = await allArticles.CountAsync();
             var items = await allArticles.Skip((page - 1) * pageSize).Take(pageSize)
                 .Select(x => _mapper.Map<ArticleView>(x)).ToListAsync();
-            return new PaginatedList<ArticleView>(items, count, page, pageSize, Constant.NumberOfPagesShow);
+            return new PaginatedList<ArticleView>(items, count, page, pageSize);
         }
         catch (Exception)
         {
-            return new PaginatedList<ArticleView>(null, 0, page, pageSize, Constant.NumberOfPagesShow);
+            return new PaginatedList<ArticleView>(null, 0, page, pageSize);
         }
     }
 

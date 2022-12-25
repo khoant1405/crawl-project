@@ -6,7 +6,5 @@ public static class Constant
 
     public const string Page = "https://thanhnien.vn/cong-nghe-game/san-pham/?trang=";
 
-    public const int NumberOfPagesShow = 5;
-
-    public static Guid IdAdmin = new("99999999-9999-9999-9999-999999999999");
+    public static Guid IdAdmin = new("f04facad-468d-442e-9562-b82bd46051f4");
 }

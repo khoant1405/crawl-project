@@ -1,22 +1,15 @@
 import * as React from 'react';
-import AppBar, { AppBarProps } from '@mui/material/AppBar';
+import AppBar, {AppBarProps} from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Toolbar, { ToolbarProps } from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
+import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button, { ButtonProps } from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
+import Button, {ButtonProps} from '@mui/material/Button';
 import FeedIcon from '@mui/icons-material/Feed';
-import { alpha, styled } from '@mui/material/styles';
-import { common, grey, purple } from '@mui/material/colors';
-import { InputBase } from '@mui/material';
+import {alpha, styled} from '@mui/material/styles';
+import {common, purple} from '@mui/material/colors';
+import {InputBase} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import SignIn from '../form/SignIn';
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 

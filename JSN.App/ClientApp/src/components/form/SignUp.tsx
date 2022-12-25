@@ -1,16 +1,9 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import Card from "@mui/material/Card";
-import Switch from "@mui/material/Switch";
-import Grid from "@mui/material/Grid";
-import MuiLink from "@mui/material/Link";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import GoogleIcon from "@mui/icons-material/Google";
 import React from "react";
-import { Box, styled, Typography } from "@mui/material";
-import { Input, Button, ButtonProps } from "reactstrap";
-import { purple } from "@mui/material/colors";
+import Card from "@mui/material/Card";
+import Grid from "@mui/material/Grid";
+import {Box, styled, Typography} from "@mui/material";
+import {Button, ButtonProps, Input} from "reactstrap";
+import {purple} from "@mui/material/colors";
 
 const PurpleButton = styled(Button)<ButtonProps>(({ theme }) => ({
     color: theme.palette.getContrastText(purple[500]),

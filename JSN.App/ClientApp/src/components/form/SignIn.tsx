@@ -1,15 +1,9 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
 import Card from "@mui/material/Card";
 import Switch from "@mui/material/Switch";
 import Grid from "@mui/material/Grid";
-import MuiLink from "@mui/material/Link";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import GoogleIcon from "@mui/icons-material/Google";
-import React from "react";
 import { Box, styled, Typography } from "@mui/material";
-import { Input, Button, ButtonProps } from "reactstrap";
+import { Button, ButtonProps, Input } from "reactstrap";
 import { purple } from "@mui/material/colors";
 
 const PurpleButton = styled(Button)<ButtonProps>(({ theme }) => ({
@@ -75,8 +69,10 @@ function SignIn() {
                                     <Typography variant="button" color="text" textTransform="none" sx={{ display: "inline-flex" }}>
                                         Don&apos;t have an account?&nbsp;
                                         <Typography
+                                            component="a"
                                             textTransform="none"
                                             color="secondary"
+                                            href="/signup"
                                         >
                                             Sign up
                                         </Typography>
