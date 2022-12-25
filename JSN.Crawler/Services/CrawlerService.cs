@@ -53,7 +53,8 @@ public class CrawlerService : ICrawlerService
 
                 var articleName = article.Attributes["title"].Value;
                 var href = article.Attributes["href"].Value;
-                var imageThumb = article.QuerySelector("img")?.Attributes["data-src"].Value.Replace("150x100", "200x150");
+                var imageThumb = article.QuerySelector("img")?.Attributes["data-src"].Value
+                    .Replace("150x100", "200x150");
                 var description = item.QuerySelector("div > div.summary > p")?.InnerText.Replace("\n", "");
 
                 var htmlArticle = webClient.DownloadString(href);
