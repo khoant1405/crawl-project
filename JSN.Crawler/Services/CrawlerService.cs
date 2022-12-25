@@ -33,8 +33,7 @@ public class CrawlerService : ICrawlerService
         var webClient = new GZipWebClient();
         var listArticle = new List<Article>();
         var lisArticleContent = new List<ArticleContent>();
-        var listIdDisplay = _articleRepository.List(x => x.Status == "Publish").AsNoTracking().Select(x => x.IdDisplay)
-            .ToList();
+        var listId = _articleRepository.List(x => x.Status == "Publish").AsNoTracking().Select(x => x.Id).ToList();
 
         for (var i = startPage; i < endPage + 1; i++)
         {
@@ -49,10 +48,9 @@ public class CrawlerService : ICrawlerService
 
                 if (article == null) continue;
 
-                var idDisplay = int.Parse(item.Attributes["data-id"].Value);
-                if (listIdDisplay.Any(x => x == idDisplay) || listArticle.Any(x => x.IdDisplay == idDisplay)) continue;
+                var articleId = int.Parse(item.Attributes["data-id"].Value);
+                if (listId.Any(x => x == articleId) || listArticle.Any(x => x.Id == articleId)) continue;
 
-                var articleId = Guid.NewGuid();
                 var articleName = article.Attributes["title"].Value;
                 var href = article.Attributes["href"].Value;
                 var imageThumb = article.QuerySelector("img")?.Attributes["data-src"].Value;
@@ -76,8 +74,7 @@ public class CrawlerService : ICrawlerService
                     RefUrl = href,
                     ImageThumb = imageThumb,
                     Description = description,
-                    CategoryId = 12,
-                    IdDisplay = idDisplay
+                    CategoryId = 12
                 };
                 listArticle.Add(newArticle);
 

@@ -1,20 +1,26 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace JSN.CoreData.Models;
 
 [Table("User")]
-[Index("UserName", Name = "UQ__User__C9F28456F2AB1464", IsUnique = true)]
-public class User
+[Index("UserName", Name = "UQ__User__C9F28456EDC4AC7C", IsUnique = true)]
+public partial class User
 {
-    [Key] public Guid Id { get; set; }
+    [Key]
+    public Guid Id { get; set; }
 
-    [StringLength(50)] public string UserName { get; set; } = null!;
+    [StringLength(50)]
+    public string UserName { get; set; } = null!;
 
-    [Required] public bool? IsActive { get; set; }
+    [Required]
+    public bool? IsActive { get; set; }
 
-    [StringLength(50)] public string Role { get; set; } = null!;
+    [StringLength(50)]
+    public string Role { get; set; } = null!;
 
     public byte[] PasswordHash { get; set; } = null!;
 

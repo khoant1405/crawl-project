@@ -2,6 +2,10 @@ import { Box, Pagination, Stack, Typography } from '@mui/material';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import TablePagination from '@mui/material/TablePagination';
+import {RouteComponentProps} from 'react-router';
+import {Link} from 'react-router-dom';
+import {ApplicationState} from '../store';
+import * as WeatherForecastsStore from '../store/WeatherForecasts';
 
 export default function Home() {
   const [page, setPage] = React.useState(1);

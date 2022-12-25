@@ -2,7 +2,7 @@
 
 public class ArticleView
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
 
     public string ArticleName { get; set; } = null!;
 
@@ -19,6 +19,4 @@ public class ArticleView
     public string? Description { get; set; }
 
     public int CategoryId { get; set; }
-
-    public int IdDisplay { get; set; }
 }
