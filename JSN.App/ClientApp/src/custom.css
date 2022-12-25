@@ -1,7 +1,11 @@
 /* Provide sufficient contrast against white background */
-a { color: #0366d6; }
+a {
+    color: #0366d6;
+}
 
-code { color: #E01A76; }
+code {
+    color: #E01A76;
+}
 
 .btn-primary {
     background-color: #1b6ec2;

@@ -9,9 +9,9 @@ import SignUp from './components/form/SignUp';
 
 export default () => (
     <Layout>
-        <Route exact path='/' component={Home} />
-        <Route path='/signin' component={SignIn} />
-        <Route path='/signup' component={SignUp} />
-        <Route path='/fetch-data/:startDateIndex?' component={FetchData} />
+        <Route exact path='/' component={Home}/>
+        <Route path='/signin' component={SignIn}/>
+        <Route path='/signup' component={SignUp}/>
+        <Route path='/fetch-data/:startDateIndex?' component={FetchData}/>
     </Layout>
 );

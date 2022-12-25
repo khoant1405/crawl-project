@@ -13,14 +13,14 @@ import SearchIcon from '@mui/icons-material/Search';
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-const CustomAppBar = styled(AppBar)<AppBarProps>(({ theme }) => ({
+const CustomAppBar = styled(AppBar)<AppBarProps>(({theme}) => ({
     color: theme.palette.getContrastText(common.white),
     backgroundColor: common.white,
     borderBottom: '1px solid #ECECEC',
     boxShadow: 'none'
 }));
 
-const PurpleButton = styled(Button)<ButtonProps>(({ theme }) => ({
+const PurpleButton = styled(Button)<ButtonProps>(({theme}) => ({
     color: theme.palette.getContrastText(purple[500]),
     backgroundColor: purple[500],
     '&:hover': {
@@ -30,7 +30,7 @@ const PurpleButton = styled(Button)<ButtonProps>(({ theme }) => ({
     boxShadow: 'none'
 }));
 
-const WhiteButton = styled(Button)<ButtonProps>(({ theme }) => ({
+const WhiteButton = styled(Button)<ButtonProps>(({theme}) => ({
     color: theme.palette.getContrastText(common.white),
     backgroundColor: common.white,
     '&:hover': {
@@ -40,7 +40,7 @@ const WhiteButton = styled(Button)<ButtonProps>(({ theme }) => ({
     boxShadow: 'none'
 }));
 
-const Search = styled('div')(({ theme }) => ({
+const Search = styled('div')(({theme}) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: alpha(theme.palette.common.white, 0.15),
@@ -57,7 +57,7 @@ const Search = styled('div')(({ theme }) => ({
     },
 }));
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
+const SearchIconWrapper = styled('div')(({theme}) => ({
     padding: theme.spacing(0, 2),
     height: '100%',
     position: 'absolute',
@@ -67,7 +67,7 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
     justifyContent: 'center',
 }));
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
+const StyledInputBase = styled(InputBase)(({theme}) => ({
     color: 'inherit',
     '& .MuiInputBase-input': {
         padding: theme.spacing(1, 1, 1, 0),
@@ -93,10 +93,10 @@ function NavMenu() {
     };
 
     return (
-        <CustomAppBar >
+        <CustomAppBar>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <FeedIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} color="secondary" />
+                    <FeedIcon sx={{display: {xs: 'none', md: 'flex'}, mr: 1}} color="secondary"/>
                     <Typography
                         variant="h6"
                         noWrap
@@ -104,7 +104,7 @@ function NavMenu() {
                         href="/"
                         sx={{
                             mr: 2,
-                            display: { xs: 'none', md: 'flex' },
+                            display: {xs: 'none', md: 'flex'},
                             fontFamily: 'monospace',
                             fontWeight: 700,
                             letterSpacing: '.3rem',
@@ -115,9 +115,9 @@ function NavMenu() {
                         JSN
                     </Typography>
 
-                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }} />
+                    <Box sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}}}/>
 
-                    <FeedIcon sx={{ display: { xs: 'flex', md: 'none' }, ml: 3, mr: 1 }} />
+                    <FeedIcon sx={{display: {xs: 'flex', md: 'none'}, ml: 3, mr: 1}}/>
                     <Typography
                         variant="h5"
                         noWrap
@@ -125,7 +125,7 @@ function NavMenu() {
                         href=""
                         sx={{
                             mr: 2,
-                            display: { xs: 'flex', md: 'none' },
+                            display: {xs: 'flex', md: 'none'},
                             flexGrow: 1,
                             fontFamily: 'monospace',
                             fontWeight: 700,
@@ -137,20 +137,20 @@ function NavMenu() {
                         JSN
                     </Typography>
 
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} />
+                    <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}/>
 
-                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                    <Box sx={{display: {xs: 'none', md: 'flex'}}}>
                         <Search>
                             <SearchIconWrapper>
-                                <SearchIcon />
+                                <SearchIcon/>
                             </SearchIconWrapper>
                             <StyledInputBase
                                 placeholder="Search…"
-                                inputProps={{ 'aria-label': 'search' }}
+                                inputProps={{'aria-label': 'search'}}
                             />
                         </Search>
                         <WhiteButton variant="contained" href={"/signin"}>Sign in</WhiteButton>
-                        <PurpleButton variant="contained" sx={{ ml: 2 }} href={"/signup"}>Sign up</PurpleButton>
+                        <PurpleButton variant="contained" sx={{ml: 2}} href={"/signup"}>Sign up</PurpleButton>
                     </Box>
                     {/* Display after login */}
                     {/* <Box sx={{ flexGrow: 0 }}>
@@ -187,4 +187,5 @@ function NavMenu() {
         </CustomAppBar>
     );
 }
+
 export default NavMenu;

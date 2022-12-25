@@ -48,10 +48,10 @@ export const actionCreators = {
             fetch(`weatherforecast`)
                 .then(response => response.json() as Promise<WeatherForecast[]>)
                 .then(data => {
-                    dispatch({ type: 'RECEIVE_WEATHER_FORECASTS', startDateIndex: startDateIndex, forecasts: data });
+                    dispatch({type: 'RECEIVE_WEATHER_FORECASTS', startDateIndex: startDateIndex, forecasts: data});
                 });
 
-            dispatch({ type: 'REQUEST_WEATHER_FORECASTS', startDateIndex: startDateIndex });
+            dispatch({type: 'REQUEST_WEATHER_FORECASTS', startDateIndex: startDateIndex});
         }
     }
 };
@@ -59,7 +59,7 @@ export const actionCreators = {
 // ----------------
 // REDUCER - For a given state and action, returns the new state. To support time travel, this must not mutate the old state.
 
-const unloadedState: WeatherForecastsState = { forecasts: [], isLoading: false };
+const unloadedState: WeatherForecastsState = {forecasts: [], isLoading: false};
 
 export const reducer: Reducer<WeatherForecastsState> = (state: WeatherForecastsState | undefined, incomingAction: Action): WeatherForecastsState => {
     if (state === undefined) {

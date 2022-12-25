@@ -55,11 +55,11 @@ public class Startup
                     ValidIssuer = Configuration.GetSection("JWT:ValidIssuer").Value
                 };
             });
-        //services.AddCors(options => options.AddPolicy(name: "NgOrigins",
-        //        policy =>
-        //        {
-        //            policy.WithOrigins("https://localhost:7193/").AllowAnyMethod().AllowAnyHeader();
-        //        }));
+        services.AddCors(options => options.AddPolicy(name: "NgOrigins",
+                policy =>
+                {
+                    policy.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader();
+                }));
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,7 +68,7 @@ public class Startup
         app.UseSwagger();
         app.UseSwaggerUI();
 
-        //app.UseCors("NgOrigins");
+        app.UseCors("NgOrigins");
 
         app.UseHttpsRedirection();
 

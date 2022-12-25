@@ -12,8 +12,13 @@ export interface CounterState {
 // They do not themselves have any side-effects; they just describe something that is going to happen.
 // Use @typeName and isActionType for type detection that works even after serialization/deserialization.
 
-export interface IncrementCountAction { type: 'INCREMENT_COUNT' }
-export interface DecrementCountAction { type: 'DECREMENT_COUNT' }
+export interface IncrementCountAction {
+    type: 'INCREMENT_COUNT'
+}
+
+export interface DecrementCountAction {
+    type: 'DECREMENT_COUNT'
+}
 
 // Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
 // declared type strings (and not any other arbitrary string).
@@ -24,8 +29,8 @@ export type KnownAction = IncrementCountAction | DecrementCountAction;
 // They don't directly mutate state, but they can have external side-effects (such as loading data).
 
 export const actionCreators = {
-    increment: () => ({ type: 'INCREMENT_COUNT' } as IncrementCountAction),
-    decrement: () => ({ type: 'DECREMENT_COUNT' } as DecrementCountAction)
+    increment: () => ({type: 'INCREMENT_COUNT'} as IncrementCountAction),
+    decrement: () => ({type: 'DECREMENT_COUNT'} as DecrementCountAction)
 };
 
 // ----------------
@@ -33,15 +38,15 @@ export const actionCreators = {
 
 export const reducer: Reducer<CounterState> = (state: CounterState | undefined, incomingAction: Action): CounterState => {
     if (state === undefined) {
-        return { count: 0 };
+        return {count: 0};
     }
 
     const action = incomingAction as KnownAction;
     switch (action.type) {
         case 'INCREMENT_COUNT':
-            return { count: state.count + 1 };
+            return {count: state.count + 1};
         case 'DECREMENT_COUNT':
-            return { count: state.count - 1 };
+            return {count: state.count - 1};
         default:
             return state;
     }

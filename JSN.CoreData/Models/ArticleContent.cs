@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,10 +6,9 @@ namespace JSN.CoreData.Models;
 
 [Table("ArticleContent")]
 [Index("ArticleId", Name = "UQ__ArticleC__9C6270E947F01336", IsUnique = true)]
-public partial class ArticleContent
+public class ArticleContent
 {
-    [Key]
-    public Guid Id { get; set; }
+    [Key] public Guid Id { get; set; }
 
     public int ArticleId { get; set; }
 
