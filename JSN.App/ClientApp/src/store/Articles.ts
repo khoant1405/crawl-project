@@ -1,5 +1,5 @@
-import {Action, Reducer} from 'redux';
-import {AppThunkAction} from '.';
+import { Action, Reducer } from 'redux';
+import { AppThunkAction } from '.';
 
 // -----------------
 // STATE - This defines the type of data maintained in the Redux store.
@@ -68,7 +68,7 @@ export const actionCreators = {
                     });
                 });
 
-            dispatch({type: 'REQUEST_ARTICLES', pageIndex: pageIndex});
+            dispatch({ type: 'REQUEST_ARTICLES', pageIndex: pageIndex });
         }
     }
 };
@@ -76,7 +76,7 @@ export const actionCreators = {
 // ----------------
 // REDUCER - For a given state and action, returns the new state. To support time travel, this must not mutate the old state.
 
-const unloadedState: ArticlesState = {articles: [], isLoading: false, totalPages: 1};
+const unloadedState: ArticlesState = { articles: [], isLoading: false, totalPages: 1 };
 
 export const reducer: Reducer<ArticlesState> = (state: ArticlesState | undefined, incomingAction: Action): ArticlesState => {
     if (state === undefined) {

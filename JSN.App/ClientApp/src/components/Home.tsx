@@ -11,8 +11,8 @@ import {
     Typography
 } from '@mui/material';
 import * as React from 'react';
-import {connect} from 'react-redux';
-import {ApplicationState} from '../store';
+import { connect } from 'react-redux';
+import { ApplicationState } from '../store';
 import * as ArticlesStore from '../store/Articles';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
@@ -28,7 +28,7 @@ type ArticleProps =
 class Home extends React.Component<any, any> {
     constructor(props: ArticleProps) {
         super(props);
-        this.state = {pageIndex: 1};
+        this.state = { pageIndex: 1 };
 
         this.handleChange = this.handleChange.bind(this);
     }
@@ -44,7 +44,7 @@ class Home extends React.Component<any, any> {
     }
 
     handleChange(event: React.ChangeEvent<unknown>, value: number) {
-        this.setState({pageIndex: value});
+        this.setState({ pageIndex: value });
     };
 
     public render() {
@@ -52,13 +52,13 @@ class Home extends React.Component<any, any> {
         const totalPages = this.props.totalPages || 1;
         return (
             <React.Fragment>
-                <Box sx={{p: 3, mt: 8, mb: 1}}>
+                <Box sx={{ p: 3, mt: 8, mb: 1 }}>
                     <Stack spacing={2}>
-                        <Pagination count={totalPages} page={pageIndex} onChange={this.handleChange} color="secondary"/>
+                        <Pagination count={totalPages} page={pageIndex} onChange={this.handleChange} color="secondary" />
                     </Stack>
                     {this.renderForecastsTable()}
                     <Stack spacing={2}>
-                        <Pagination count={totalPages} page={pageIndex} onChange={this.handleChange} color="secondary"/>
+                        <Pagination count={totalPages} page={pageIndex} onChange={this.handleChange} color="secondary" />
                     </Stack>
                 </Box>
             </React.Fragment>
@@ -90,7 +90,7 @@ class Home extends React.Component<any, any> {
             //     )}
             //   </tbody>
             // </table>
-            <Grid container justifyContent="center" spacing={3} sx={{mt: 1, mb: 2}}>
+            <Grid container justifyContent="center" spacing={3} sx={{ mt: 1, mb: 2 }}>
                 {this.props.articles.map((article: ArticlesStore.Article) => (
                     <Grid key={article.id} item>
                         {/* <Paper
@@ -121,10 +121,10 @@ class Home extends React.Component<any, any> {
                             </CardContent>
                             <CardActions disableSpacing>
                                 <IconButton aria-label="add to favorites">
-                                    <FavoriteIcon/>
+                                    <FavoriteIcon />
                                 </IconButton>
                                 <IconButton aria-label="share">
-                                    <ShareIcon/>
+                                    <ShareIcon />
                                 </IconButton>
                             </CardActions>
                         </Card>
