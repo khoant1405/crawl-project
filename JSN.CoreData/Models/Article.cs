@@ -14,7 +14,7 @@ public class Article
 
     public DateTime CreationDate { get; set; }
 
-    public Guid CreationBy { get; set; }
+    public Guid UserId { get; set; }
 
     [Column("RefURL")] [StringLength(255)] public string RefUrl { get; set; } = null!;
 
@@ -25,4 +25,8 @@ public class Article
     public int CategoryId { get; set; }
 
     [InverseProperty("Article")] public virtual ArticleContent? ArticleContent { get; set; }
+
+    [ForeignKey("UserId")]
+    [InverseProperty("Articles")]
+    public virtual User User { get; set; } = null!;
 }

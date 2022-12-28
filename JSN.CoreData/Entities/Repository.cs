@@ -35,8 +35,9 @@ public class Repository<T> : IRepository<T> where T : class
         DbSet.RemoveRange(entity);
     }
 
-    public IQueryable<T> List(Expression<Func<T, bool>> expression)
+    public IQueryable<T> List(Expression<Func<T, bool>>? expression)
     {
+        if (expression == null) return DbSet;
         return DbSet.Where(expression);
     }
 

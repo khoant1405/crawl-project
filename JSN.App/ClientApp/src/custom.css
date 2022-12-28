@@ -2,6 +2,4 @@
 .container-sm,
 .container-md,
 .container-lg,
-.container-xl {
-    max-width: 1246px !important;
-}
+.container-xl { max-width: 1246px !important; }

@@ -15,9 +15,9 @@ public class CrawlerService : ICrawlerService
 {
     private readonly IRepository<ArticleContent> _articleContentRepository;
     private readonly IRepository<Article> _articleRepository;
-    private readonly IRepository<User> _userRepository;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IRepository<User> _userRepository;
 
     public CrawlerService(IUnitOfWork unitOfWork, IRepository<Article> articleRepository,
         IRepository<ArticleContent> articleContentRepository,
@@ -74,7 +74,7 @@ public class CrawlerService : ICrawlerService
                     ArticleName = articleName,
                     Status = "Publish",
                     CreationDate = dateTime,
-                    CreationBy = Constant.IdAdmin,
+                    UserId = Constant.IdAdmin,
                     RefUrl = href,
                     ImageThumb = imageThumb,
                     Description = description,
@@ -106,15 +106,13 @@ public class CrawlerService : ICrawlerService
     {
         try
         {
-            var allArticles = _articleRepository.List(x => x.Status == "Publish").OrderByDescending(x => x.Id)
-                .AsNoTracking();
+            var allArticles = _articleRepository.List(x => x.Status == "Publish").OrderByDescending(x => x.Id);
             var count = allArticles.Count();
             var items = await allArticles.Skip((page - 1) * pageSize).Take(pageSize)
                 .Select(x => _mapper.Map<ArticleView>(x)).ToListAsync();
-            foreach (var item in items)
-            {
-                item.UserName = _userRepository.List(x => x.Id == item.CreationBy).Select(x => x.UserName).FirstOrDefault();
-            }
+            //foreach (var item in items)
+            //    item.UserName = _userRepository.List(x => x.Id == item.CreationBy).Select(x => x.UserName)
+            //        .FirstOrDefault();
             return new PaginatedList<ArticleView>(items, count, page, pageSize);
         }
         catch (Exception)

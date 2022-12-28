@@ -25,4 +25,6 @@ public class User
     public DateTime? TokenCreated { get; set; }
 
     public DateTime? TokenExpires { get; set; }
+
+    [InverseProperty("User")] public virtual ICollection<Article> Articles { get; } = new List<Article>();
 }
