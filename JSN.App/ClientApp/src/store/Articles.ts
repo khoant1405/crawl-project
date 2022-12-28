@@ -12,12 +12,13 @@ export interface ArticlesState {
 }
 
 export interface Article {
-    id: any;
-    articleName: any;
-    creationDate: any;
-    refUrl: any;
-    imageThumb: any;
-    description: any;
+    id: number;
+    articleName: string;
+    creationDate: string;
+    refUrl: string;
+    imageThumb: string;
+    description: string;
+    userName: string;
 }
 
 export interface ArticlesOnPage {

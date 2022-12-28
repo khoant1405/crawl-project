@@ -15,16 +15,19 @@ public class CrawlerService : ICrawlerService
 {
     private readonly IRepository<ArticleContent> _articleContentRepository;
     private readonly IRepository<Article> _articleRepository;
+    private readonly IRepository<User> _userRepository;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
 
     public CrawlerService(IUnitOfWork unitOfWork, IRepository<Article> articleRepository,
         IRepository<ArticleContent> articleContentRepository,
+        IRepository<User> userRepository,
         IMapper mapper)
     {
         _unitOfWork = unitOfWork;
         _articleRepository = articleRepository;
         _articleContentRepository = articleContentRepository;
+        _userRepository = userRepository;
         _mapper = mapper;
     }
 
@@ -103,11 +106,15 @@ public class CrawlerService : ICrawlerService
     {
         try
         {
-            var allArticles = _articleRepository.List(x => x.Status == "Publish").OrderByDescending(x => x.CreationDate)
+            var allArticles = _articleRepository.List(x => x.Status == "Publish").OrderByDescending(x => x.Id)
                 .AsNoTracking();
-            var count = await allArticles.CountAsync();
+            var count = allArticles.Count();
             var items = await allArticles.Skip((page - 1) * pageSize).Take(pageSize)
                 .Select(x => _mapper.Map<ArticleView>(x)).ToListAsync();
+            foreach (var item in items)
+            {
+                item.UserName = _userRepository.List(x => x.Id == item.CreationBy).Select(x => x.UserName).FirstOrDefault();
+            }
             return new PaginatedList<ArticleView>(items, count, page, pageSize);
         }
         catch (Exception)

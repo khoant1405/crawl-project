@@ -10,7 +10,7 @@ public class ArticleView
 
     public DateTime? CreationDate { get; set; }
 
-    //public Guid? CreationBy { get; set; }
+    public Guid? CreationBy { get; set; }
 
     public string RefUrl { get; set; } = null!;
 
@@ -19,4 +19,6 @@ public class ArticleView
     public string? Description { get; set; }
 
     //public int CategoryId { get; set; }
+
+    public string? UserName { get; set; }
 }
