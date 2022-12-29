@@ -8,6 +8,6 @@ public class AutoMapperProfile : Profile
 {
     public AutoMapperProfile()
     {
-        CreateMap<Article, ArticleView>();
+        CreateMap<Article, ArticleView>().ForMember(des => des.UserName, act => act.MapFrom(src => src.User.UserName));
     }
 }

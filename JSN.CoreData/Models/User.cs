@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace JSN.CoreData.Models;
 
 [Table("User")]
-[Index("UserName", Name = "UQ__User__C9F28456EDC4AC7C", IsUnique = true)]
+[Index("UserName", Name = "UQ__User__C9F2845679440F6B", IsUnique = true)]
 public class User
 {
     [Key] public Guid Id { get; set; }
